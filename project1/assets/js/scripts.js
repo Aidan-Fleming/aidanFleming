@@ -16,6 +16,7 @@ function getCountryNamesAndCodes() {
         option += '<option value="' + country[1] + '">' + country[0] + "</option>";
       }
       $("#countrySelect").append(option);
+      
     },
   });
 }
@@ -36,6 +37,8 @@ function getCurrentMapLocation() {
       //get more information about current location
       getCurrentLocationDetails(latitude, longitude);
       getTime(latitude, longitude);
+      getRoad(latitude, longitude);
+      getWeather(latitude, longitude);
     }
 
     // Define an error callback function
@@ -81,7 +84,10 @@ function getCurrentLocationDetails(latitude, longitude) {
       console.log("Current Geo Location :", jsonObject);
       countryCode = jsonObject.countryCode;
       console.log(countryCode);
+      countryName = jsonObject.countryName;
+      console.log(countryName);
       getCountryInfo(countryCode)
+      getWiki(countryName)
       initializeMap(userLatitude,userLongitude,countryCode);
     },
   });
@@ -157,6 +163,8 @@ $('#countrySelect').change(function () {
   // Use the country code to select the corresponding option and retrieve its text
   var countryName = $("#countrySelect option[value='" + countryCode + "']").text();
   console.log("Selected country name is:", countryName);
+  
+  
 
   //get coordinates using open cage and full country name
   getSelectedCountryCoords(countryName, countryCode);
@@ -167,7 +175,8 @@ $('#countrySelect').change(function () {
 
 //get coordinates using open cage and full country name
 function getSelectedCountryCoords(countryName, countryCode){
-  $.ajax({
+  console.log (countryName, countryCode)
+  $.ajax({    
     url: "assets/php/getCountryCoords.php",
     dataType: 'json',
     data: {
@@ -180,11 +189,15 @@ function getSelectedCountryCoords(countryName, countryCode){
 
       //make the mai api calls
       //+udating map focus
-      updateMapView(result.data.lat, result.data.lng,countryCode)
-      console.log(result.data.lat, result.data.lng,countryCode)
+      var Latitude = result.data.lat
+      var Longitude = result.data.lng
+      updateMapView(Latitude, Longitude,countryCode)
+      console.log(Latitude, Longitude,countryCode)
       //+get country info
-      getTime(result.data.lat, result.data.lng)
       getCountryInfo(countryCode)
+      getTime(Latitude, Longitude);
+      getRoad(Latitude, Longitude);
+      getWeather(Latitude, Longitude);
     },
   });
 
@@ -224,12 +237,34 @@ function getCountryInfo(countryCode){
 
 }
 
-// Wiki Modal
-
+function getWiki(countryName){
+  console.log(countryName)
+    $.ajax({
+      url: "assets/php/wikipediaSearchJSON.php",
+      type: 'GET',
+      dataType: 'json',
+      data: {
+        q: countryName
+      },
+      success: function(result) {
+  
+        console.log(JSON.stringify(result));
+              
+          console.log(result);
+          //linking the results with , appropriate modal IDs in the HTML File
+          $('#txtSummary').html(result['geonames']["entry"]['summary']);
+          $('#txtURL').html(result['geonames']["entry"]['wikipediaUrl']);        
+      
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        console.log(jqXHR)
+      }
+    }); 
+  
+  }
 
 // Time Modal
 function getTime(latitude, longitude){
-console.log(latitude, longitude)
   $.ajax({
     url: "assets/php/timezoneJSON.php",
     type: 'POST',
@@ -244,8 +279,8 @@ console.log(latitude, longitude)
             
         console.log(result);
         //linking the results with , appropriate modal IDs in the HTML File
-        $('#txtTime').html(result['geonames'][0]['time']);
-        $('#txtTimezone').html(result['geonames'][0]['timezoneId']);
+        $('#txtTimezone').html(result['timezoneId']);
+        $('#txtTime').html(result['time']);
       
     
     },
@@ -257,10 +292,60 @@ console.log(latitude, longitude)
 }
 
 //  Weather Modal
-
+function getWeather(latitude, longitude) {
+  console.log("coords in getWeather are")
+  console.log(latitude, longitude)
+    $.ajax({
+      url: "assets/php/weatherJSON.php",
+      type: 'POST',
+      dataType: 'json',
+      data: {
+        lat: latitude,
+        lon: longitude
+      },
+      success: function(result) {
+  
+        console.log(JSON.stringify(result));
+              
+          console.log(result);
+          //linking the results with , appropriate modal IDs in the HTML File
+          $('#textWeather').html(result["weather"][0]["main"]);
+          $('#textDescription').html(result["weather"][0]["description"]);
+          $('#textTemp').html(result["main"]["temp"]);
+      
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        console.log(jqXHR)
+      }
+    }); 
+  }
 
 // Road Modal
+function getRoad(latitude, longitude) {
+  $.ajax({
+    url: "assets/php/roadJSON.php",
+    type: 'POST',
+    dataType: 'json',
+    data: {
+      lat: latitude,
+      lng: longitude
+    },
+    success: function(result) {
 
+      console.log(JSON.stringify(result));
+            
+        console.log(result);
+        //linking the results with , appropriate modal IDs in the HTML File
+        $('#txtRoad').html(result["results"][0]["annotations"]["roadinfo"]["drive_on"]);
+        $('#txtSpeed').html(result["results"][0]["annotations"]["roadinfo"]["speed_in"]);
+      
+    
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      console.log(jqXHR)
+    }
+  }); 
+}
 
 
 
