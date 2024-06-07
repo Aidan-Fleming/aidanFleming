@@ -231,36 +231,36 @@ function getCountryInfo(countryCode){
 			
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
-				console.log(jqXHR)
+				console.error('Error: ', jqXHR.responseText);
 			}
 		}); 
-
+    $('.pre-load').addClass("fadeOut");
 }
 
 function getWiki(countryName){
   console.log(countryName)
     $.ajax({
       url: "assets/php/wikipediaSearchJSON.php",
-      type: 'GET',
+      type: 'POST',
       dataType: 'json',
       data: {
-        q: countryName
+        search: countryName
       },
       success: function(result) {
   
-        console.log(JSON.stringify(result));
-              
-          console.log(result);
-          //linking the results with , appropriate modal IDs in the HTML File
-          $('#txtSummary').html(result['geonames']["entry"]['summary']);
-          $('#txtURL').html(result['geonames']["entry"]['wikipediaUrl']);        
-      
+        if(result.data.length) {
+          if(result.status.code == "200") {
+            $(`#wiki-page`).html(`<a href=[https://$%7bresult.data[0].wikipediaUrl%7d]https://${result.data[0].wikipediaUrl} target="_blank" rel="wikipedia link">Wikipedia Page</a>`)
+          } else {
+            $(`#wiki-page`).html(`N/A`);
+          }
+        }
       },
       error: function(jqXHR, textStatus, errorThrown) {
-        console.log(jqXHR)
+        console.error('Error: ', jqXHR.responseText);
       }
     }); 
-  
+    $('.pre-load').addClass("fadeOut");
   }
 
 // Time Modal
@@ -285,10 +285,10 @@ function getTime(latitude, longitude){
     
     },
     error: function(jqXHR, textStatus, errorThrown) {
-      console.log(jqXHR)
+      console.error('Error: ', jqXHR.responseText);
     }
   }); 
-
+  $('.pre-load').addClass("fadeOut");
 }
 
 //  Weather Modal
@@ -315,9 +315,10 @@ function getWeather(latitude, longitude) {
       
       },
       error: function(jqXHR, textStatus, errorThrown) {
-        console.log(jqXHR)
+        console.error('Error: ', jqXHR.responseText);
       }
-    }); 
+    });
+    $('.pre-load').addClass("fadeOut");
   }
 
 // Road Modal
@@ -342,12 +343,19 @@ function getRoad(latitude, longitude) {
     
     },
     error: function(jqXHR, textStatus, errorThrown) {
-      console.log(jqXHR)
+      console.error('Error: ', jqXHR.responseText);
     }
-  }); 
+  });
+  $('.pre-load').addClass("fadeOut");
 }
 
+$('#CountryInfoModal').on('hidden.bs.modal', function () {
 
+  $('#pre-load-info').removeClass("fadeOut");
+  $('#capital, #currencyCode, #population, #surface, #country-code, #neighbour-coutries, #continent, #curr-code, #wiki-page').html("");
+  $('#CountryInfoModal img').attr("src", '');
+
+});
 
 
 
