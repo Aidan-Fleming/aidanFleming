@@ -168,6 +168,7 @@ $('#countrySelect').change(function () {
 
   //get coordinates using open cage and full country name
   getSelectedCountryCoords(countryName, countryCode);
+  getWiki(countryName)
 
   
 
@@ -250,7 +251,7 @@ function getWiki(countryName){
         const geonames = result.geonames[0];
         console.log(geonames);
         if(geonames.wikipediaUrl) {
-          $(`#wiki-page`).html(`<a href=[https://$%7bresult.data[0].wikipediaUrl%7d]https://${geonames.wikipediaUrl} target="_blank" rel="wikipedia link">Wikipedia Page</a>`)
+          $(`#wiki-page`).html(`<a href=https://${geonames.wikipediaUrl} target="_blank" rel="wikipedia link">Wikipedia Page</a>`)
         }
         else {
           $(`#wiki-page`).html(`N/A`);
