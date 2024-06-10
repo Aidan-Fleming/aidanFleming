@@ -247,13 +247,13 @@ function getWiki(countryName){
         search: countryName
       },
       success: function(result) {
-  
-        if(result.data.length) {
-          if(result.status.code == "200") {
-            $(`#wiki-page`).html(`<a href=[https://$%7bresult.data[0].wikipediaUrl%7d]https://${result.data[0].wikipediaUrl} target="_blank" rel="wikipedia link">Wikipedia Page</a>`)
-          } else {
-            $(`#wiki-page`).html(`N/A`);
-          }
+        const geonames = result.geonames[0];
+        console.log(geonames);
+        if(geonames.wikipediaUrl) {
+          $(`#wiki-page`).html(`<a href=[https://$%7bresult.data[0].wikipediaUrl%7d]https://${geonames.wikipediaUrl} target="_blank" rel="wikipedia link">Wikipedia Page</a>`)
+        }
+        else {
+          $(`#wiki-page`).html(`N/A`);
         }
       },
       error: function(jqXHR, textStatus, errorThrown) {
