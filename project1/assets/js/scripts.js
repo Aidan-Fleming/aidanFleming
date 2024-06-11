@@ -449,11 +449,8 @@ function getBorder(countryCode) {
       const south = bounds.getSouth();
       const east = bounds.getEast();
       const west = bounds.getWest();
-      console.log(north);
-      console.log(south);
-      console.log(east);
-      console.log(west);
-      showEarthquakes(north, south, east, west)
+      showEarthquakes(north, south, east, west);
+      showCities(countryCode);
     }
   });
 };
@@ -472,6 +469,8 @@ function showEarthquakes(north, south, east, west) {
     success: function(result) {
       console.log(JSON.stringify(result));
 
+      var markers = L.markerClusterGroup();
+
       result.earthquakes.forEach(earthquake => {
         var dateTime = earthquake.datetime
         var mag = earthquake.magnitude
@@ -482,12 +481,55 @@ function showEarthquakes(north, south, east, west) {
           shape: 'circle',
           prefix: 'fa'
         });
-        
 
-       console.log(`Datetime: ${dateTime}, Magnitude: ${mag}, Latitude: ${lat}, Longitude: ${lng}`);
-       L.marker([lat, lng], {icon: redMarker}).bindPopup("Datetime: "+ dateTime + " & Magnitude: "+mag).addTo(map);
+        var marker = L.marker([lat, lng], {icon: redMarker}).bindPopup("Datetime: " + dateTime + " & Magnitude: " + mag);
+        markers.addLayer(marker);
       });
+      map.addLayer(markers);
+      
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      //console.error('Error: ', jqXHR.responseText);
+    }
+  });
+  $('.pre-load').addClass("fadeOut");
+}
 
+function showCities(countryCode) {
+  $.ajax({
+    url: "assets/php/citiesJSON.php",
+    type: 'GET',
+    dataType: 'json',
+    data: {
+      countryCode: countryCode
+    },
+    success: function(result) {
+      console.log(JSON.stringify(result));
+
+      const filteredCities = result.geonames.filter(city => city.name !== "United Kingdom"& city.name !== "Great Britain");
+
+      var markers = L.markerClusterGroup();
+
+      for (let i = 0; i < 10; i++) {
+        const city = filteredCities[i];
+        console.log(`City: ${city.name}, Population: ${city.population}, Latitude: ${city.lat}, Longitude: ${city.lng}`);
+        
+        var cityName = city.name
+        var popu = city.population
+        var lat = city.lat
+        var lng = city.lng
+        var yellowMarker = L.ExtraMarkers.icon({          
+          markerColor: 'yellow',
+          shape: 'star',
+          prefix: 'fa'          
+        });
+        
+        var marker = L.marker([lat, lng], {icon: yellowMarker}).bindPopup("City: " + cityName + " & Population: " + popu);
+        markers.addLayer(marker);
+      }
+
+      // Add the marker cluster group to the map
+      map.addLayer(markers);       
       
     },
     error: function(jqXHR, textStatus, errorThrown) {
