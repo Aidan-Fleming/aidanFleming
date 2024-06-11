@@ -89,6 +89,9 @@ function getCurrentLocationDetails(latitude, longitude) {
       getCountryInfo(countryCode)
       getWiki(countryName)
       initializeMap(userLatitude,userLongitude,countryCode);
+      showFootballMarkers();
+      showUniMarkers();
+      showStonehenge();
     },
   });
 };
@@ -358,7 +361,52 @@ $('#CountryInfoModal').on('hidden.bs.modal', function () {
 
 });
 
+// Show Markers for UK
 
+function showFootballMarkers() {
+  var greenIcon = new L.Icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+  });  
+  L.marker([53.430833, -2.960833], {icon: greenIcon}).bindPopup("Anfield").addTo(map); // Anfield
+  L.marker([54.975556, -1.621667], {icon: greenIcon}).bindPopup("St James' Park").addTo(map); // St James
+  L.marker([52.509167, -1.884722], {icon: greenIcon}).bindPopup("Villa Park").addTo(map); // Villa Park
+  L.marker([50.861944, -0.083333], {icon: greenIcon}).bindPopup("Falmer Stadium").addTo(map); // Falmer 
+  L.marker([53.483056, -2.200278], {icon: greenIcon}).bindPopup("Etihad Stadium").addTo(map); // Etihad
+  L.marker([51.604444, -0.066389], {icon: greenIcon}).bindPopup("White Hart Lane").addTo(map); // White Hart Lane
+}
+
+function showUniMarkers() {
+  var goldIcon = new L.Icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-gold.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+  });
+  L.marker([51.755, -1.255], {icon: goldIcon}).bindPopup("University of Oxford ").addTo(map); // Oxford
+  L.marker([52.204311, 0.113818], {icon: goldIcon}).bindPopup("University of Cambridge").addTo(map); // Cambridge
+  L.marker([55.95, -3.183333], {icon: goldIcon}).bindPopup("University of Edinburgh ").addTo(map); // Edinburgh
+  L.marker([51.456389, -2.604444], {icon: goldIcon}).bindPopup("University of Bristol ").addTo(map); // Bristol
+  L.marker([55.873543, -4.289058], {icon: goldIcon}).bindPopup("University of Glasgow ").addTo(map); // Glasgow
+}
+
+function showStonehenge() {
+  var blackIcon = new L.Icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+  });
+  L.marker([51.1740, -1.8224], {icon: blackIcon}).bindPopup("Stonehenge").addTo(map); // Stonehenge
+}
 
 
 
@@ -409,10 +457,10 @@ function getBorder(countryCode) {
 //polygon styling
 function polyStyle() {
   return {
-    "color": "#994444",
+    "color": "#40453e",
     "weight": 5,
     "opacity": 1.0,
-    "fillColor": "#fcb6b6",
+    "fillColor": "#8a1fbf",
     "fillOpacity": 0.45
   };
 }
