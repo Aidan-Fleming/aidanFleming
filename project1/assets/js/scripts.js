@@ -89,9 +89,7 @@ function getCurrentLocationDetails(latitude, longitude) {
       getCountryInfo(countryCode)
       getWiki(countryName)
       initializeMap(userLatitude,userLongitude,countryCode);
-      showFootballMarkers();
-      showUniMarkers();
-      showStonehenge();
+      showEarthquakes();
     },
   });
 };
@@ -242,7 +240,6 @@ function getCountryInfo(countryCode){
 }
 
 function getWiki(countryName){
-  console.log(countryName)
     $.ajax({
       url: "assets/php/wikipediaSearchJSON.php",
       type: 'POST',
@@ -297,8 +294,6 @@ function getTime(latitude, longitude){
 
 //  Weather Modal
 function getWeather(latitude, longitude) {
-  console.log("coords in getWeather are")
-  console.log(latitude, longitude)
     $.ajax({
       url: "assets/php/weatherJSON.php",
       type: 'POST',
@@ -361,9 +356,13 @@ $('#CountryInfoModal').on('hidden.bs.modal', function () {
 
 });
 
+function showEarthquakes() {
+
+}
+
 // Show Markers for UK
 
-function showFootballMarkers() {
+/* function showFootballMarkers() {
   var greenIcon = new L.Icon({
     iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -406,7 +405,7 @@ function showStonehenge() {
     shadowSize: [41, 41]
   });
   L.marker([51.1740, -1.8224], {icon: blackIcon}).bindPopup("Stonehenge").addTo(map); // Stonehenge
-}
+} */
 
 
 
@@ -450,9 +449,54 @@ function getBorder(countryCode) {
       const south = bounds.getSouth();
       const east = bounds.getEast();
       const west = bounds.getWest();
+      console.log(north);
+      console.log(south);
+      console.log(east);
+      console.log(west);
+      showEarthquakes(north, south, east, west)
     }
   });
 };
+
+function showEarthquakes(north, south, east, west) {
+  $.ajax({
+    url: "assets/php/earthquakesJSON.php",
+    type: 'GET',
+    dataType: 'json',
+    data: {
+      north: north,
+      south: south,
+      east: east,
+      west: west
+    },
+    success: function(result) {
+      console.log(JSON.stringify(result));
+
+      result.earthquakes.forEach(earthquake => {
+        var dateTime = earthquake.datetime
+        var mag = earthquake.magnitude
+        var lat = earthquake.lat
+        var lng = earthquake.lng
+        var redMarker = L.ExtraMarkers.icon({          
+          markerColor: 'white',
+          shape: 'circle',
+          prefix: 'fa'
+        });
+        
+
+       console.log(`Datetime: ${dateTime}, Magnitude: ${mag}, Latitude: ${lat}, Longitude: ${lng}`);
+       L.marker([lat, lng], {icon: redMarker}).bindPopup("Datetime: "+ dateTime + " & Magnitude: "+mag).addTo(map);
+      });
+
+      
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      //console.error('Error: ', jqXHR.responseText);
+    }
+  });
+  $('.pre-load').addClass("fadeOut");
+}
+
 
 //polygon styling
 function polyStyle() {
