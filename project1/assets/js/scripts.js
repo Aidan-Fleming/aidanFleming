@@ -248,10 +248,14 @@ function getWiki(countryName){
         search: countryName
       },
       success: function(result) {
+        console.log(result);        
+        $('#txtSummary').html(result['geonames'][0]['summary']);
+
+        
         const geonames = result.geonames[0];
         console.log(geonames);
         if(geonames.wikipediaUrl) {
-          $(`#wiki-page`).html(`<a href=https://${geonames.wikipediaUrl} target="_blank" rel="wikipedia link">Wikipedia Page</a>`)
+          $(`#wiki-page`).html(`<a href=https://${geonames.wikipediaUrl} target="_blank" rel="wikipedia link">Wikipedia Page</a>`);
         }
         else {
           $(`#wiki-page`).html(`N/A`);
@@ -455,6 +459,8 @@ function getBorder(countryCode) {
   });
 };
 
+var currentMarkers = null;
+
 function showEarthquakes(north, south, east, west) {
   $.ajax({
     url: "assets/php/earthquakesJSON.php",
@@ -468,6 +474,10 @@ function showEarthquakes(north, south, east, west) {
     },
     success: function(result) {
       console.log(JSON.stringify(result));
+
+      if (currentMarkers) {
+        map.removeLayer(currentMarkers);
+      }
 
       var markers = L.markerClusterGroup();
 
@@ -486,6 +496,8 @@ function showEarthquakes(north, south, east, west) {
         markers.addLayer(marker);
       });
       map.addLayer(markers);
+
+      currentMarkers = markers;
       
     },
     error: function(jqXHR, textStatus, errorThrown) {
@@ -494,6 +506,8 @@ function showEarthquakes(north, south, east, west) {
   });
   $('.pre-load').addClass("fadeOut");
 }
+
+var currentCityMarkers = null;
 
 function showCities(countryCode) {
   $.ajax({
@@ -508,11 +522,15 @@ function showCities(countryCode) {
 
       const filteredCities = result.geonames.filter(city => city.name !== "United Kingdom"& city.name !== "Great Britain");
 
+      if (currentCityMarkers) {
+        map.removeLayer(currentCityMarkers);
+      }
+
       var markers = L.markerClusterGroup();
 
       for (let i = 0; i < 10; i++) {
         const city = filteredCities[i];
-        console.log(`City: ${city.name}, Population: ${city.population}, Latitude: ${city.lat}, Longitude: ${city.lng}`);
+        // console.log(`City: ${city.name}, Population: ${city.population}, Latitude: ${city.lat}, Longitude: ${city.lng}`);
         
         var cityName = city.name
         var popu = city.population
@@ -529,8 +547,9 @@ function showCities(countryCode) {
       }
 
       // Add the marker cluster group to the map
-      map.addLayer(markers);       
+      map.addLayer(markers);
       
+      currentCityMarkers = markers;
     },
     error: function(jqXHR, textStatus, errorThrown) {
       //console.error('Error: ', jqXHR.responseText);
