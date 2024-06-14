@@ -7,7 +7,7 @@
 
 	$executionStartTime = microtime(true);
 
-	$url = 'https://openexchangerates.org/api/latest.json?symbols=GBP&app_id=5df76a7ee64a4f048d64ef4f63474c1c';
+	$url = 'https://openexchangerates.org/api/latest.json?symbols='. $_REQUEST['currencyCode'] . '&app_id=5df76a7ee64a4f048d64ef4f63474c1c';
 
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
