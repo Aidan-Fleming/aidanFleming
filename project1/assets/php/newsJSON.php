@@ -7,7 +7,7 @@
 
 	$executionStartTime = microtime(true);
 
-	$url='http://api.weatherapi.com/v1/current.json?key=5b197a10ce114cfb9dd123410241406&q=' . $_REQUEST['lat'] .','. $_REQUEST['lon'];
+	$url = 'https://newsdata.io/api/1/latest?apikey=pub_463194d4060e8b8f48861530839e285c003cc&country=' . $_REQUEST['countryCode'];
 
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
