@@ -138,7 +138,7 @@
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content shadow">
       <div class="modal-header bg-success bg-gradient text-white">
-        <h5 class="modal-title">Overview</h5>
+        <h5 class="modal-title">Time info</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -186,7 +186,7 @@
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content shadow">
       <div class="modal-header bg-success bg-gradient text-white">
-        <h5 class="modal-title">Overview</h5>
+        <h5 class="modal-title">Wikipedia</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -230,7 +230,7 @@
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content shadow">
       <div class="modal-header bg-success bg-gradient text-white">
-        <h5 class="modal-title">Overview</h5>
+        <h5 class="modal-title">Road infomation</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -278,7 +278,7 @@
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content shadow">
       <div class="modal-header bg-success bg-gradient text-white">
-        <h5 class="modal-title">Overview</h5>
+        <h5 class="modal-title">Weather</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -328,6 +328,113 @@
             </td>
 
           </tr>      
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-success btn-sm" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="newsModal" class="modal" data-bs-backdrop="false" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content shadow">
+      <div class="modal-header bg-success bg-gradient text-white">
+        <h5 class="modal-title">News</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-striped">
+          <tr>
+
+            <td class="text-center">
+              <i class="fa-solid fa-cloud fa-xl text-success"></i>
+            </td>
+        
+            <td>
+              Main Weather
+            </td>
+
+            <td id="textWeather" class="text-end">
+              value
+            </td>
+
+          </tr>
+          <tr>
+
+            <td class="text-center">
+              <i class="fa-solid fa-pen fa-xl text-success"></i>
+            </td>
+
+            <td>
+              Description
+            </td>
+
+            <td id="textDescription" class="text-end">
+              value
+            </td>
+
+          </tr>
+          <tr>
+
+            <td class="text-center">
+              <i class="fa-solid fa-temperature-full fa-xl text-success"></i>
+            </td>
+
+            <td>
+              Temperature (Celsius) 
+            </td>
+
+            <td id="textTemp" class="text-end">
+              value
+            </td>
+
+          </tr>      
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-success btn-sm" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="exchangeModal" class="modal" data-bs-backdrop="false" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content shadow">
+      <div class="modal-header bg-success bg-gradient text-white">
+        <h5 class="modal-title">Exchange</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-striped">
+          <tr id="firstRow">
+
+
+            <td class="text-start">
+              USD
+            </td>
+
+            <td id="countryCurrentTxt" class="text-end">              
+            </td>
+            
+
+
+          </tr>
+          <tr>
+
+            <td id="txtUSD">              
+              <input type="number" class="form-control" id="usdAmount" value=1 >
+            </td>
+
+            <td id="txtOTHER" class="text-end">
+              <input type="number" class="form-control" id="otherAmount" value="">
+            </td>
+
+
+          </tr>
+        
         </table>
       </div>
       <div class="modal-footer">
