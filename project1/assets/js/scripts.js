@@ -86,6 +86,7 @@ function getCurrentLocationDetails(latitude, longitude) {
       console.log(countryCode);
       countryName = jsonObject.countryName;
       console.log(countryName);
+      $("#dropDown").html(countryName);
       getCountryInfo(countryCode)
       getWiki(countryName)
       initializeMap(userLatitude,userLongitude,countryCode);
@@ -127,7 +128,7 @@ function initializeMap(userLatitude,userLongitude,countryCode) {
   myLayer = new L.geoJson().addTo(map);
 
   //add border polygon
-  getBorder(countryCode);
+  getBorder(countryCode, countryName);
 
   //add easy buttons
   L.easyButton("fa-info", function (btn, map) {
@@ -158,6 +159,12 @@ function initializeMap(userLatitude,userLongitude,countryCode) {
     $("#exchangeModal").modal("show");
   }).addTo(map);
 
+  /* var toggleMarkers = {
+    "Markers":
+    "Cities":
+    "Earthequakes":
+  } */
+
 }
 
 
@@ -170,6 +177,7 @@ $('#countrySelect').change(function () {
   // Use the country code to select the corresponding option and retrieve its text
   var countryName = $("#countrySelect option[value='" + countryCode + "']").text();
   console.log("Selected country name is:", countryName);
+  
   
   
 
@@ -319,10 +327,13 @@ function getWeather(latitude, longitude) {
         console.log(JSON.stringify(result));
               
           console.log(result);
+          const weather = result.current.condition;
+          console.log(weather);
           //linking the results with , appropriate modal IDs in the HTML File
-          $('#textWeather').html(result["weather"][0]["main"]);
-          $('#textDescription').html(result["weather"][0]["description"]);
-          $('#textTemp').html(result["main"]["temp"]);
+          $('#textWeather').html(result["current"]["condition"]["text"]);          
+          $('#textIcon').html(`<img src="${weather.icon}" alt="Weather Icon">`);
+          $('#textTemp').html(result["current"]["temp_c"]);
+          $('#textHumidity').html(result["current"]["humidity"]);
       
       },
       error: function(jqXHR, textStatus, errorThrown) {
@@ -463,7 +474,7 @@ function getBorder(countryCode) {
       const west = bounds.getWest();
       showEarthquakes(north, south, east, west);
       showCities(countryCode);
-      showNews(countryCode);
+      showNews(countryCode);      
     }
   });
 };
@@ -591,13 +602,30 @@ function showNews(countryCode) {
     },
     success: function(result) {
 
-      /* console.log(JSON.stringify(result));
+        console.log(JSON.stringify(result));
             
         console.log(result);
-        linking the results with , appropriate modal IDs in the HTML File
-        $('#txtRoad').html(result["results"][0]["annotations"]["roadinfo"]["drive_on"]);
-        $('#txtSpeed').html(result["results"][0]["annotations"]["roadinfo"]["speed_in"]); */
-      
+
+        const newsData = result.results[0];
+        const newsData2 = result.results[1];
+        const newsData3 = result.results[2];
+        console.log(newsData); 
+
+        // linking the results with , appropriate modal IDs in the HTML File
+        $('#txtTitle').html(result["results"][0]["title"]);
+        $('#imageURL').html(`<img src="${newsData.image_url}" alt="News Image" style="width: 100%; height: auto;">`);
+        $('#txtDescription').html(result["results"][0]["description"]);
+        $(`#txtLink`).html(`<a href=https://${newsData.link} target="_blank" rel="article link">Article</a>`);
+
+        $('#txtTitle2').html(result["results"][1]["title"]);
+        $('#imageURL2').html(`<img src="${newsData2.image_url}" alt="News Image" style="width: 100%; height: auto;">`);
+        $('#txtDescription2').html(result["results"][1]["description"]);
+        $(`#txtLink2`).html(`<a href=https://${newsData2.link} target="_blank" rel="article link">Article</a>`);
+
+        $('#txtTitle3').html(result["results"][2]["title"]);
+        $('#imageURL3').html(`<img src="${newsData3.image_url}" alt="News Image" style="width: 100%; height: auto;">`);
+        $('#txtDescription3').html(result["results"][2]["description"]);
+        $(`#txtLink3`).html(`<a href=https://${newsData3.link} target="_blank" rel="article link">Article</a>`);
     
     },
     error: function(jqXHR, textStatus, errorThrown) {
