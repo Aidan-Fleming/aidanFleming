@@ -12,13 +12,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.EasyButton/2.4.0/easy-button.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
-    <title>GAZETTEER</title>
+    <title>Gazetteer</title>
 </head>
 <body>
     <span id="selectContainer">
   <select id="countrySelect" class="form-select shadow-sm">
     <!-- populate from PHP call that returns only the codes and names from the countryborder GeoJSON file -->
-    <option>Select Country</option>
+    <option id="dropDown">Select Country</option>
   </select>
 </span>
 
@@ -289,15 +289,16 @@
               <i class="fa-solid fa-cloud fa-xl text-success"></i>
             </td>
         
-            <td>
+            <td id="textWeather">
               Main Weather
             </td>
 
-            <td id="textWeather" class="text-end">
+            <td id="textIcon" class="text-end">
               value
             </td>
 
           </tr>
+
           <tr>
 
             <td class="text-center">
@@ -305,10 +306,10 @@
             </td>
 
             <td>
-              Description
+              Humidity
             </td>
 
-            <td id="textDescription" class="text-end">
+            <td id="textHumidity" class="text-end">
               value
             </td>
 
@@ -347,50 +348,62 @@
       <div class="modal-body">
         <table class="table table-striped">
           <tr>
-
-            <td class="text-center">
-              <i class="fa-solid fa-cloud fa-xl text-success"></i>
+            <td id="txtTitle">              
             </td>
-        
-            <td>
-              Main Weather
-            </td>
-
-            <td id="textWeather" class="text-end">
-              value
-            </td>
-
           </tr>
           <tr>
-
-            <td class="text-center">
-              <i class="fa-solid fa-pen fa-xl text-success"></i>
+            <td id="imageURL">              
             </td>
-
-            <td>
-              Description
-            </td>
-
-            <td id="textDescription" class="text-end">
-              value
-            </td>
-
           </tr>
           <tr>
-
-            <td class="text-center">
-              <i class="fa-solid fa-temperature-full fa-xl text-success"></i>
+            <td id="txtDescription">              
             </td>
-
-            <td>
-              Temperature (Celsius) 
+          </tr>
+          <tr>
+            <td id="txtLink">              
             </td>
+          </tr>
 
-            <td id="textTemp" class="text-end">
-              value
+          <tr></tr>
+          <tr></tr>
+
+          <tr>
+            <td id="txtTitle2">              
             </td>
+          </tr>
+          <tr>
+            <td id="imageURL2">              
+            </td>
+          </tr>
+          <tr>
+            <td id="txtDescription2">              
+            </td>
+          </tr>
+          <tr>
+            <td id="txtLink2">              
+            </td>
+          </tr>
 
-          </tr>      
+          <tr></tr>
+          <tr></tr>
+
+          <tr>
+            <td id="txtTitle3">              
+            </td>
+          </tr>
+          <tr>
+            <td id="imageURL3">              
+            </td>
+          </tr>
+          <tr>
+            <td id="txtDescription3">              
+            </td>
+          </tr>
+          <tr>
+            <td id="txtLink3">              
+            </td>
+          </tr>
+     
         </table>
       </div>
       <div class="modal-footer">
@@ -445,7 +458,7 @@
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.8.0/leaflet.js"></script>
- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.2/jquery.min.js "></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.2/jquery.min.js "></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.6.1/toastify.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-extra-markers/1.2.1/js/leaflet.extra-markers.js"></script>
