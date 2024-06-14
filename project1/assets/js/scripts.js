@@ -150,9 +150,15 @@ function initializeMap(userLatitude,userLongitude,countryCode) {
     $("#weatherModal").modal("show");
   }).addTo(map);
 
+  L.easyButton("fa-solid fa-newspaper", function (btn, map) {
+    $("#newsModal").modal("show");
+  }).addTo(map);
+
+  L.easyButton("fa-dollar-sign", function (btn, map) {
+    $("#exchangeModal").modal("show");
+  }).addTo(map);
+
 }
-
-
 
 
 //handle onchange event
@@ -188,6 +194,7 @@ function getSelectedCountryCoords(countryName, countryCode){
     success: function (result) {
       console.log("country coordinates")
       console.log(result);
+      console.log(countryName, countryCode);
 
       //make the mai api calls
       //+udating map focus
@@ -228,7 +235,8 @@ function getCountryInfo(countryCode){
 					$('#txtLanguages').html(result['data'][0]['languages']);
 					$('#txtPopulation').html(result['data'][0]['population']);
           $('#txtCurrency').html(result['data'][0]['currencyCode']);
-				
+
+          showExchangeRates(result['data'][0]['currencyCode']);				
 				}        
 			
 			},
@@ -336,9 +344,9 @@ function getRoad(latitude, longitude) {
     },
     success: function(result) {
 
-      console.log(JSON.stringify(result));
+      //console.log(JSON.stringify(result));
             
-        console.log(result);
+        //console.log(result);
         //linking the results with , appropriate modal IDs in the HTML File
         $('#txtRoad').html(result["results"][0]["annotations"]["roadinfo"]["drive_on"]);
         $('#txtSpeed').html(result["results"][0]["annotations"]["roadinfo"]["speed_in"]);
@@ -455,6 +463,7 @@ function getBorder(countryCode) {
       const west = bounds.getWest();
       showEarthquakes(north, south, east, west);
       showCities(countryCode);
+      showNews(countryCode);
     }
   });
 };
@@ -473,7 +482,7 @@ function showEarthquakes(north, south, east, west) {
       west: west
     },
     success: function(result) {
-      console.log(JSON.stringify(result));
+      //console.log(JSON.stringify(result));
 
       if (currentMarkers) {
         map.removeLayer(currentMarkers);
@@ -486,8 +495,9 @@ function showEarthquakes(north, south, east, west) {
         var mag = earthquake.magnitude
         var lat = earthquake.lat
         var lng = earthquake.lng
-        var redMarker = L.ExtraMarkers.icon({          
-          markerColor: 'white',
+        var redMarker = L.ExtraMarkers.icon({    
+          icon: 'fa-bolt',     
+          markerColor: 'black',
           shape: 'circle',
           prefix: 'fa'
         });
@@ -518,9 +528,9 @@ function showCities(countryCode) {
       countryCode: countryCode
     },
     success: function(result) {
-      console.log(JSON.stringify(result));
+      //console.log(JSON.stringify(result));
 
-      const filteredCities = result.geonames.filter(city => city.name !== "United Kingdom"& city.name !== "Great Britain");
+      const filteredCities = result.geonames.filter(city => city.name !== "United Kingdom" & city.name !== "Great Britain");
 
       if (currentCityMarkers) {
         map.removeLayer(currentCityMarkers);
@@ -536,7 +546,8 @@ function showCities(countryCode) {
         var popu = city.population
         var lat = city.lat
         var lng = city.lng
-        var yellowMarker = L.ExtraMarkers.icon({          
+        var yellowMarker = L.ExtraMarkers.icon({
+          icon: 'fa-coffee',      
           markerColor: 'yellow',
           shape: 'star',
           prefix: 'fa'          
@@ -569,5 +580,82 @@ function polyStyle() {
     "fillOpacity": 0.45
   };
 }
+
+function showNews(countryCode) {
+  $.ajax({
+    url: "assets/php/newsJSON.php",
+    type: 'POST',
+    dataType: 'json',
+    data: {
+      countryCode: countryCode
+    },
+    success: function(result) {
+
+      /* console.log(JSON.stringify(result));
+            
+        console.log(result);
+        linking the results with , appropriate modal IDs in the HTML File
+        $('#txtRoad').html(result["results"][0]["annotations"]["roadinfo"]["drive_on"]);
+        $('#txtSpeed').html(result["results"][0]["annotations"]["roadinfo"]["speed_in"]); */
+      
+    
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      console.error('Error: ', jqXHR.responseText);
+    }
+  });
+  $('.pre-load').addClass("fadeOut");
+}
+
+var rate;
+
+function showExchangeRates(currencyCode) {
+  $.ajax({
+    url: "assets/php/exchangeRatesJSON.php",
+    type: 'POST',
+    dataType: 'json',
+    data: {
+      currencyCode: currencyCode
+    },
+    success: function(result) {     
+
+      console.log(JSON.stringify(result));
+            
+        console.log(result);
+        //linking the results with , appropriate modal IDs in the HTML File
+        $('#countryCurrentTxt').html(currencyCode);
+        rate = (result["rates"][currencyCode]);
+        $('#otherAmount').val(rate.toFixed(2));
+
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+      console.error('Error: ', jqXHR.responseText);
+    }
+  });
+  $('.pre-load').addClass("fadeOut");
+}
+
+
+usdAmount.addEventListener("input", function() {
+  // Get the value of usdAmount
+  var x = usdAmount.value;
+
+  // Calculate y as x * rate
+  var y = x * rate;
+
+  // Update the value of otherAmount
+  otherAmount.value = y.toFixed(2);
+});
+
+otherAmount.addEventListener("input", function() {
+  // Get the value of usdAmount
+  var x = otherAmount.value;
+
+  // Calculate y as x * rate
+  var y = x / rate;
+
+  // Update the value of otherAmount
+  usdAmount.value = y.toFixed(2);
+});
 
 
