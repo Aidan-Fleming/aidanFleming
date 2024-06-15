@@ -13,6 +13,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.EasyButton/2.4.0/easy-button.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <title>Gazetteer</title>
+    <style>
+      .black-outline {
+      border: 1px solid rgba(0, 0, 0, 0.11);
+    }
+    .light-grey-bg {
+      background-color: #f0f0f0;
+    }
+    </style>
 </head>
 <body>
     <span id="selectContainer">
@@ -282,54 +290,37 @@
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <table class="table table-striped">
-          <tr>
-
-            <td class="text-center">
-              <i class="fa-solid fa-cloud fa-xl text-success"></i>
-            </td>
-        
-            <td id="textWeather">
-              Main Weather
-            </td>
-
-            <td id="textIcon" class="text-end">
-              value
-            </td>
-
-          </tr>
-
-          <tr>
-
-            <td class="text-center">
-              <i class="fa-solid fa-pen fa-xl text-success"></i>
-            </td>
-
-            <td>
-              Humidity
-            </td>
-
-            <td id="textHumidity" class="text-end">
-              value
-            </td>
-
-          </tr>
-          <tr>
-
-            <td class="text-center">
-              <i class="fa-solid fa-temperature-full fa-xl text-success"></i>
-            </td>
-
-            <td>
-              Temperature (Celsius) 
-            </td>
-
-            <td id="textTemp" class="text-end">
-              value
-            </td>
-
-          </tr>      
-        </table>
+        <div class="container">
+          <div class="row mb-3">
+            <div class="col black-outline">
+              <span id="todayTxt">Today</span>
+              <div class="d-flex justify-content-between">
+                <span id="textIcon" class="text-start">value</span>
+                <span id="textWeather" class="mx-auto">Main Weather</span>
+                <span id="textTemp" class="text-end">value</span>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-5 black-outline light-grey-bg">
+              <span>Tomorrow</span>
+              <div class="d-flex justify-content-between">
+                <span id="textIcon2" class="text-start">value</span>
+                <span id="textWeather2" class="mx-auto">Main Weather</span>
+                <span id="textTemp2" class="text-end">value</span>
+              </div>
+            </div>
+            <div class="col"></div>
+            <div class="col-5 black-outline light-grey-bg">
+              <span>In 2 days</span>
+              <div class="d-flex justify-content-between">
+                <span id="textIcon3" class="text-start">value</span>
+                <span id="textWeather3" class="mx-auto">Main Weather</span>
+                <span id="textTemp3" class="text-end">value</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-success btn-sm" data-bs-dismiss="modal">Close</button>
@@ -337,6 +328,8 @@
     </div>
   </div>
 </div>
+
+
 
 <div id="newsModal" class="modal" data-bs-backdrop="false" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
