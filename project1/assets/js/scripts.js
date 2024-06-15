@@ -1,5 +1,9 @@
 let myLayer;
-let map; 
+let map;
+var currentCityMarkers = null;
+var currentMarkers = null;
+var rate;
+
 
 //get country codes from countryBorders.geo.json
 getCountryNamesAndCodes();
@@ -95,6 +99,20 @@ function getCurrentLocationDetails(latitude, longitude) {
   });
 };
 
+var earthquakeMarker = L.ExtraMarkers.icon({    
+  icon: 'fa-bolt',     
+  markerColor: 'black',
+  shape: 'circle',
+  prefix: 'fa'
+});
+
+var cityMarker = L.ExtraMarkers.icon({
+  icon: 'fa-coffee',      
+  markerColor: 'yellow',
+  shape: 'star',
+  prefix: 'fa'          
+});
+
 //initialize map , layers and markers 
 function initializeMap(userLatitude,userLongitude,countryCode) {
   var streets = L.tileLayer(
@@ -158,13 +176,6 @@ function initializeMap(userLatitude,userLongitude,countryCode) {
   L.easyButton("fa-dollar-sign", function (btn, map) {
     $("#exchangeModal").modal("show");
   }).addTo(map);
-
-  /* var toggleMarkers = {
-    "Markers":
-    "Cities":
-    "Earthequakes":
-  } */
-
 }
 
 
@@ -327,13 +338,22 @@ function getWeather(latitude, longitude) {
         console.log(JSON.stringify(result));
               
           console.log(result);
-          const weather = result.current.condition;
+          const weather = result.forecast.forecastday[0].day.condition;
+          const weather2 = result.forecast.forecastday[1].day.condition;
+          const weather3 = result.forecast.forecastday[2].day.condition;
           console.log(weather);
           //linking the results with , appropriate modal IDs in the HTML File
-          $('#textWeather').html(result["current"]["condition"]["text"]);          
+          $('#textWeather').html(result["forecast"]["forecastday"][0]["day"]["condition"]["text"]);          
           $('#textIcon').html(`<img src="${weather.icon}" alt="Weather Icon">`);
-          $('#textTemp').html(result["current"]["temp_c"]);
-          $('#textHumidity').html(result["current"]["humidity"]);
+          $('#textTemp').html(result["forecast"]["forecastday"][0]["day"]["avgtemp_c"] + "<span>°C</span>");
+
+          $('#textWeather2').html(result["forecast"]["forecastday"][1]["day"]["condition"]["text"]);          
+          $('#textIcon2').html(`<img src="${weather2.icon}" alt="Weather Icon">`);
+          $('#textTemp2').html(result["forecast"]["forecastday"][1]["day"]["avgtemp_c"] + "<span>°C</span>");
+
+          $('#textWeather3').html(result["forecast"]["forecastday"][2]["day"]["condition"]["text"]);          
+          $('#textIcon3').html(`<img src="${weather3.icon}" alt="Weather Icon">`);
+          $('#textTemp3').html(result["forecast"]["forecastday"][2]["day"]["avgtemp_c"] + "<span>°C</span>");
       
       },
       error: function(jqXHR, textStatus, errorThrown) {
@@ -378,61 +398,6 @@ $('#CountryInfoModal').on('hidden.bs.modal', function () {
   $('#CountryInfoModal img').attr("src", '');
 
 });
-
-function showEarthquakes() {
-
-}
-
-// Show Markers for UK
-
-/* function showFootballMarkers() {
-  var greenIcon = new L.Icon({
-    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
-    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41]
-  });  
-  L.marker([53.430833, -2.960833], {icon: greenIcon}).bindPopup("Anfield").addTo(map); // Anfield
-  L.marker([54.975556, -1.621667], {icon: greenIcon}).bindPopup("St James' Park").addTo(map); // St James
-  L.marker([52.509167, -1.884722], {icon: greenIcon}).bindPopup("Villa Park").addTo(map); // Villa Park
-  L.marker([50.861944, -0.083333], {icon: greenIcon}).bindPopup("Falmer Stadium").addTo(map); // Falmer 
-  L.marker([53.483056, -2.200278], {icon: greenIcon}).bindPopup("Etihad Stadium").addTo(map); // Etihad
-  L.marker([51.604444, -0.066389], {icon: greenIcon}).bindPopup("White Hart Lane").addTo(map); // White Hart Lane
-}
-
-function showUniMarkers() {
-  var goldIcon = new L.Icon({
-    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-gold.png',
-    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41]
-  });
-  L.marker([51.755, -1.255], {icon: goldIcon}).bindPopup("University of Oxford ").addTo(map); // Oxford
-  L.marker([52.204311, 0.113818], {icon: goldIcon}).bindPopup("University of Cambridge").addTo(map); // Cambridge
-  L.marker([55.95, -3.183333], {icon: goldIcon}).bindPopup("University of Edinburgh ").addTo(map); // Edinburgh
-  L.marker([51.456389, -2.604444], {icon: goldIcon}).bindPopup("University of Bristol ").addTo(map); // Bristol
-  L.marker([55.873543, -4.289058], {icon: goldIcon}).bindPopup("University of Glasgow ").addTo(map); // Glasgow
-}
-
-function showStonehenge() {
-  var blackIcon = new L.Icon({
-    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-black.png',
-    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41]
-  });
-  L.marker([51.1740, -1.8224], {icon: blackIcon}).bindPopup("Stonehenge").addTo(map); // Stonehenge
-} */
-
-
-
-
 
 // Function to update map view based on new coordinates
 function updateMapView(latitude, longitude,countryCode ) {
@@ -506,14 +471,8 @@ function showEarthquakes(north, south, east, west) {
         var mag = earthquake.magnitude
         var lat = earthquake.lat
         var lng = earthquake.lng
-        var redMarker = L.ExtraMarkers.icon({    
-          icon: 'fa-bolt',     
-          markerColor: 'black',
-          shape: 'circle',
-          prefix: 'fa'
-        });
 
-        var marker = L.marker([lat, lng], {icon: redMarker}).bindPopup("Datetime: " + dateTime + " & Magnitude: " + mag);
+        var marker = L.marker([lat, lng], {icon: earthquakeMarker}).bindPopup("Datetime: " + dateTime + " & Magnitude: " + mag);
         markers.addLayer(marker);
       });
       map.addLayer(markers);
@@ -527,8 +486,6 @@ function showEarthquakes(north, south, east, west) {
   });
   $('.pre-load').addClass("fadeOut");
 }
-
-var currentCityMarkers = null;
 
 function showCities(countryCode) {
   $.ajax({
@@ -557,14 +514,8 @@ function showCities(countryCode) {
         var popu = city.population
         var lat = city.lat
         var lng = city.lng
-        var yellowMarker = L.ExtraMarkers.icon({
-          icon: 'fa-coffee',      
-          markerColor: 'yellow',
-          shape: 'star',
-          prefix: 'fa'          
-        });
         
-        var marker = L.marker([lat, lng], {icon: yellowMarker}).bindPopup("City: " + cityName + " & Population: " + popu);
+        var marker = L.marker([lat, lng], {icon: cityMarker}).bindPopup("City: " + cityName + " & Population: " + popu);
         markers.addLayer(marker);
       }
 
