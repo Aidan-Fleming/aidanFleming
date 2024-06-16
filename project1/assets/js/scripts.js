@@ -3,6 +3,7 @@ let map;
 var currentCityMarkers = null;
 var currentMarkers = null;
 var rate;
+var layersVisible = true;
 
 
 //get country codes from countryBorders.geo.json
@@ -113,6 +114,8 @@ var cityMarker = L.ExtraMarkers.icon({
   prefix: 'fa'          
 });
 
+
+
 //initialize map , layers and markers 
 function initializeMap(userLatitude,userLongitude,countryCode) {
   var streets = L.tileLayer(
@@ -136,19 +139,21 @@ function initializeMap(userLatitude,userLongitude,countryCode) {
     "Satellite": satellite
   };
 
-  //initialise map
-  map= L.map("map", {
+  map = L.map("map", {
     layers: [streets]
   }).setView([userLatitude, userLongitude], 6);
 
-  //add maps to layers control 
   var layerControl = L.control.layers(basemaps).addTo(map);
   myLayer = new L.geoJson().addTo(map);
 
-  //add border polygon
+  // Initialize LayerGroups
+  earthquakeLayer = L.layerGroup().addTo(map);
+  cityLayer = L.layerGroup().addTo(map);
+
+  // Add border polygon
   getBorder(countryCode, countryName);
 
-  //add easy buttons
+  // Add easy buttons
   L.easyButton("fa-info", function (btn, map) {
     $("#infoModal").modal("show");
   }).addTo(map);
@@ -176,6 +181,21 @@ function initializeMap(userLatitude,userLongitude,countryCode) {
   L.easyButton("fa-dollar-sign", function (btn, map) {
     $("#exchangeModal").modal("show");
   }).addTo(map);
+
+  L.easyButton("fa-location-dot", function(btn, map) {
+    if (layersVisible) {
+      map.removeLayer(earthquakeLayer);
+      map.removeLayer(cityLayer);
+    } else {
+      map.addLayer(earthquakeLayer);
+      map.addLayer(cityLayer);
+    }
+    layersVisible = !layersVisible;
+  }, "Toggle All Layers").addTo(map);
+
+  // Add the LayerGroups to the control layers
+  layerControl.addOverlay(earthquakeLayer, "Earthquakes");
+  layerControl.addOverlay(cityLayer, "Cities");
 }
 
 
@@ -458,8 +478,6 @@ function showEarthquakes(north, south, east, west) {
       west: west
     },
     success: function(result) {
-      //console.log(JSON.stringify(result));
-
       if (currentMarkers) {
         map.removeLayer(currentMarkers);
       }
@@ -467,21 +485,22 @@ function showEarthquakes(north, south, east, west) {
       var markers = L.markerClusterGroup();
 
       result.earthquakes.forEach(earthquake => {
-        var dateTime = earthquake.datetime
-        var mag = earthquake.magnitude
-        var lat = earthquake.lat
-        var lng = earthquake.lng
+        var dateTime = earthquake.datetime;
+        var mag = earthquake.magnitude;
+        var lat = earthquake.lat;
+        var lng = earthquake.lng;
 
-        var marker = L.marker([lat, lng], {icon: earthquakeMarker}).bindPopup("Datetime: " + dateTime + " & Magnitude: " + mag);
+        var marker = L.marker([lat, lng], { icon: earthquakeMarker })
+          .bindPopup("Datetime: " + dateTime + " & Magnitude: " + mag);
         markers.addLayer(marker);
       });
-      map.addLayer(markers);
 
+      earthquakeLayer.clearLayers();
+      earthquakeLayer.addLayer(markers);
       currentMarkers = markers;
-      
     },
     error: function(jqXHR, textStatus, errorThrown) {
-      //console.error('Error: ', jqXHR.responseText);
+      console.error('Error: ', jqXHR.responseText);
     }
   });
   $('.pre-load').addClass("fadeOut");
@@ -496,41 +515,36 @@ function showCities(countryCode) {
       countryCode: countryCode
     },
     success: function(result) {
-      //console.log(JSON.stringify(result));
-
-      const filteredCities = result.geonames.filter(city => city.name !== "United Kingdom" & city.name !== "Great Britain");
-
       if (currentCityMarkers) {
         map.removeLayer(currentCityMarkers);
       }
 
       var markers = L.markerClusterGroup();
 
+      const filteredCities = result.geonames.filter(city => city.name !== "United Kingdom" && city.name !== "Great Britain");
+
       for (let i = 0; i < 10; i++) {
         const city = filteredCities[i];
-        // console.log(`City: ${city.name}, Population: ${city.population}, Latitude: ${city.lat}, Longitude: ${city.lng}`);
-        
-        var cityName = city.name
-        var popu = city.population
-        var lat = city.lat
-        var lng = city.lng
-        
-        var marker = L.marker([lat, lng], {icon: cityMarker}).bindPopup("City: " + cityName + " & Population: " + popu);
+        var cityName = city.name;
+        var popu = city.population;
+        var lat = city.lat;
+        var lng = city.lng;
+
+        var marker = L.marker([lat, lng], { icon: cityMarker })
+          .bindPopup("City: " + cityName + " & Population: " + popu);
         markers.addLayer(marker);
       }
 
-      // Add the marker cluster group to the map
-      map.addLayer(markers);
-      
+      cityLayer.clearLayers();
+      cityLayer.addLayer(markers);
       currentCityMarkers = markers;
     },
     error: function(jqXHR, textStatus, errorThrown) {
-      //console.error('Error: ', jqXHR.responseText);
+      console.error('Error: ', jqXHR.responseText);
     }
   });
   $('.pre-load').addClass("fadeOut");
 }
-
 
 //polygon styling
 function polyStyle() {
