@@ -101,14 +101,14 @@ function getCurrentLocationDetails(latitude, longitude) {
 };
 
 var earthquakeMarker = L.ExtraMarkers.icon({    
-  icon: 'fa-bolt',     
+  icon: 'fa-house-crack',     
   markerColor: 'black',
   shape: 'circle',
   prefix: 'fa'
 });
 
 var cityMarker = L.ExtraMarkers.icon({
-  icon: 'fa-coffee',      
+  icon: 'fa-people-group',      
   markerColor: 'yellow',
   shape: 'star',
   prefix: 'fa'          
