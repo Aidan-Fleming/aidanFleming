@@ -7,7 +7,7 @@
 
 	$executionStartTime = microtime(true);
 
-	$url = 'https://openexchangerates.org/api/latest.json?symbols='. $_REQUEST['currencyCode'] . '&app_id=5df76a7ee64a4f048d64ef4f63474c1c';
+	$url = 'http://api.geonames.org/earthquakesJSON?north=' . $_POST['north'].'&south='. $_POST['south'].'&east='. $_POST['east'].'&west='. $_POST['west'].'&username=aidanfleming';
 
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -40,5 +40,7 @@
 	
 		echo json_encode($response); 
 	}
+
+	
 
 ?>

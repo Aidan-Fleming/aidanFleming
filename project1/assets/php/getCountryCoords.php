@@ -17,16 +17,27 @@
 
 	$decode = json_decode($result,true);
 
-   	print_r($decode);
-	
-	$output['status']['code'] = "200";
-	$output['status']['name'] = "ok";
-	$output['status']['description'] = "success";
-	$output['status']['returnedIn'] = intval((microtime(true) - $executionStartTime) * 1000) . " ms";
-	$output['data'] = $decode['results']['0']['geometry'];
-	
-	header('Content-Type: application/json; charset=UTF-8');
+   // print_r($decode);	
 
-	echo json_encode($output); 
+	if($decode) {
+		$output['status']['code'] = "200";
+		$output['status']['name'] = "ok";
+		$output['status']['description'] = "success";
+		$output['status']['returnedIn'] = intval((microtime(true) - $executionStartTime) * 1000) . " ms";
+		$output['data'] = $decode['results']['0']['geometry'];
+		
+		header('Content-Type: application/json; charset=UTF-8');
+	
+		echo json_encode($output); 
+	}
+	else {
+		$response = new stdClass();
+		$response->success = false;
+		$response->message = "lmao";
+
+		header('Content-Type: application/json; charset=UTF-8');
+	
+		echo json_encode($response); 
+	}
 
 ?>

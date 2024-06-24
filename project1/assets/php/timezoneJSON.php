@@ -7,7 +7,7 @@
 
 	$executionStartTime = microtime(true);
 
-	$url='http://api.geonames.org/timezoneJSON?lat=' . $_REQUEST['lat'] . '&lng=' . $_REQUEST['lng'] . '&username=aidanfleming';
+	$url='https://api.opencagedata.com/geocode/v1/json?q=' . $_REQUEST['lat'] . '%2C' . $_REQUEST['lng'] . '&key=69686e17ac404e1f992344af848997c7';
 
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -20,14 +20,25 @@
 	echo $result; exit();
 	$decode = json_decode($result,true);	
 
-	$output['status']['code'] = "200";
-	$output['status']['name'] = "ok";
-	$output['status']['description'] = "success";
-	$output['status']['returnedIn'] = intval((microtime(true) - $executionStartTime) * 1000) . " ms";
-	$output['data'] = $decode['geonames'];
+	if($decode) {
+		$output['status']['code'] = "200";
+		$output['status']['name'] = "ok";
+		$output['status']['description'] = "success";
+		$output['status']['returnedIn'] = intval((microtime(true) - $executionStartTime) * 1000) . " ms";
+		$output['data'] = $decode['geonames'];
+		
+		header('Content-Type: application/json; charset=UTF-8');
+	
+		echo json_encode($output); 
+	}
+	else {
+		$response = new stdClass();
+		$response->success = false;
+		$response->message = "lmao";
 
-	header('Content-Type: application/json; charset=UTF-8');
-
-	echo json_encode($output); 
+		header('Content-Type: application/json; charset=UTF-8');
+	
+		echo json_encode($response); 
+	} 
 
 ?>

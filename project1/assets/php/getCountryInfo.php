@@ -7,7 +7,7 @@
 
 	$executionStartTime = microtime(true);
 
-	$url='http://api.geonames.org/countryInfoJSON?formatted=true&country=' . $_REQUEST['countryCode'] . '&username=skwembeproff';
+	$url='http://api.geonames.org/countryInfoJSON?formatted=true&country=' . $_REQUEST['countryCode'] . '&username=aidanfleming';
 
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -20,13 +20,25 @@
 
 	$decode = json_decode($result,true);	
 
-	$output['status']['code'] = "200";
-	$output['status']['name'] = "ok";
-	$output['status']['description'] = "success";
-	$output['status']['returnedIn'] = intval((microtime(true) - $executionStartTime) * 1000) . " ms";
-	$output['data'] = $decode['geonames'];
-	header('Content-Type: application/json; charset=UTF-8');
+	if($decode) {
+		$output['status']['code'] = "200";
+		$output['status']['name'] = "ok";
+		$output['status']['description'] = "success";
+		$output['status']['returnedIn'] = intval((microtime(true) - $executionStartTime) * 1000) . " ms";
+		$output['data'] = $decode['geonames'];
+		
+		header('Content-Type: application/json; charset=UTF-8');
+	
+		echo json_encode($output); 
+	}
+	else {
+		$response = new stdClass();
+		$response->success = false;
+		$response->message = "lmao";
 
-	echo json_encode($output); 
+		header('Content-Type: application/json; charset=UTF-8');
+	
+		echo json_encode($response); 
+	}
 
 ?>
