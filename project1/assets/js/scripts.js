@@ -465,10 +465,7 @@ function getBorder(countryCode) {
       const south = bounds.getSouth();
       const east = bounds.getEast();
       const west = bounds.getWest();
-      console.log(north)
-      console.log(south)
-      console.log(east)
-      console.log(west)
+      
       showEarthquakes(north, south, east, west);
       showCities(countryCode);
       showNews(countryCode);      
@@ -489,10 +486,6 @@ function showEarthquakes(north, south, east, west) {
       west: west
     },
     success: function(result) {
-      console.log(north)
-      console.log(south)
-      console.log(east)
-      console.log(west)
       
       if (currentMarkers) {
         map.removeLayer(currentMarkers);
