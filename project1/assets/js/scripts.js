@@ -291,14 +291,16 @@ function getWiki(countryName){
       data: {
         search: countryName
       },
-      success: function(result) {               
-        const geonames = result.geonames[0];
-
-        if(geonames.wikipediaUrl) {
-          $(`#wiki-page`).html(`<a href=https://${geonames.wikipediaUrl} target="_blank" rel="wikipedia link">Wikipedia Page</a>`);
-        }
-        else {
-          $(`#wiki-page`).html(`N/A`);
+      success: function(result) {                     
+        const geonames = result['query']["pages"]['31717'];
+        
+        if(geonames.fullurl) {
+          $('#wiki-Summ').html(geonames.extract);
+          $('#wiki-Summ').on('click', function() {
+            window.open(`${geonames.fullurl}`, '_blank');
+        });
+          } else {
+          $('#wiki-Summ').html(`N/A`);
         }
       },
       error: function(jqXHR, textStatus, errorThrown) {
@@ -349,20 +351,22 @@ function getWeather(latitude, longitude) {
   
 
           const weather = result.forecast.forecastday[0].day.condition;
-          const weather2 = result.forecast.forecastday[1].day.condition;
-          const weather3 = result.forecast.forecastday[2].day.condition;
+          const weather1 = result.forecast.forecastday[1].day.condition;
+          const weather2 = result.forecast.forecastday[2].day.condition;
   
           //linking the results with , appropriate modal IDs in the HTML File
           $('#locationWeather').html(result["location"]["name"] + ", " + result["location"]["country"]);
 
           $('#textWeather').html(result["forecast"]["forecastday"][0]["day"]["condition"]["text"]);          
           $('#textIcon').html(`<img src="${weather.icon}" alt="Weather Icon">`);
-          $('#textTemp').html(Math.round(result["forecast"]["forecastday"][0]["day"]["avgtemp_c"]) + "<span>°C</span>");
+          $('#textMaxTemp').html(Math.round(result["forecast"]["forecastday"][0]["day"]["maxtemp_c"]) + "<span>°C</span>");
+          $('#textMinTemp').html(Math.round(result["forecast"]["forecastday"][0]["day"]["mintemp_c"]) + "<span>°C</span>");
           
 
-          $('#textWeather2').html(result["forecast"]["forecastday"][1]["day"]["condition"]["text"]);          
-          $('#textIcon2').html(`<img src="${weather2.icon}" alt="Weather Icon">`);
-          $('#textTemp2').html(Math.round(result["forecast"]["forecastday"][1]["day"]["avgtemp_c"]) + "<span>°C</span>");
+          $('#textWeather1').html(result["forecast"]["forecastday"][1]["day"]["condition"]["text"]);          
+          $('#textIcon1').html(`<img src="${weather1.icon}" alt="Weather Icon">`);
+          $('#textMaxTemp1').html(Math.round(result["forecast"]["forecastday"][0]["day"]["maxtemp_c"]) + "<span>°C</span>");
+          $('#textMinTemp1').html(Math.round(result["forecast"]["forecastday"][0]["day"]["mintemp_c"]) + "<span>°C</span>");
 
           var dateStr = result["forecast"]["forecastday"][1]["date"];
           
@@ -370,9 +374,10 @@ function getWeather(latitude, longitude) {
           
           $('#tomorrow').html(formattedDate);
 
-          $('#textWeather3').html(result["forecast"]["forecastday"][2]["day"]["condition"]["text"]);          
-          $('#textIcon3').html(`<img src="${weather3.icon}" alt="Weather Icon">`);
-          $('#textTemp3').html(Math.round(result["forecast"]["forecastday"][2]["day"]["avgtemp_c"]) + "<span>°C</span>");
+          $('#textWeather2').html(result["forecast"]["forecastday"][2]["day"]["condition"]["text"]);          
+          $('#textIcon2').html(`<img src="${weather2.icon}" alt="Weather Icon">`);
+          $('#textMaxTemp2').html(Math.round(result["forecast"]["forecastday"][0]["day"]["maxtemp_c"]) + "<span>°C</span>");
+          $('#textMinTemp2').html(Math.round(result["forecast"]["forecastday"][0]["day"]["mintemp_c"]) + "<span>°C</span>");
 
           
           var dateStr1 = result["forecast"]["forecastday"][2]["date"];
