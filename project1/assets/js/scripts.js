@@ -97,7 +97,6 @@ function getCurrentLocationDetails(latitude, longitude) {
       getCountryInfo(countryCode)
       getWiki(countryName)
       initializeMap(userLatitude,userLongitude,countryCode);
-      showEarthquakes();
     },
   });
 };
@@ -477,7 +476,7 @@ function getBorder(countryCode) {
 function showEarthquakes(north, south, east, west) {
   $.ajax({
     url: "assets/php/earthquakesJSON.php",
-    type: 'POST',
+    type: 'GET',
     dataType: 'json',
     data: {
       north: north,
