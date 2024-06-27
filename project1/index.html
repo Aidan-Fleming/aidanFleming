@@ -10,15 +10,29 @@
     <link rel="manifest" href="/site.webmanifest">
    
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.8.0/leaflet.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.6.1/toastify.min.css">    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-extra-markers/1.2.1/css/leaflet.extra-markers.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.EasyButton/2.4.0/easy-button.min.css">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.8.0/leaflet.css"> -->
+    <link rel="stylesheet" href="/node_modules/leaflet/dist/leaflet.css">
 
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.6.1/toastify.min.css"> -->  
+    <link rel="stylesheet" href="/node_modules/toastify-js/src/toastify.css">
+    
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.min.css"> -->  
+    <link rel="stylesheet" href="/node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css">
+    <link rel="stylesheet" href="/node_modules/leaflet.markercluster/dist/MarkerCluster.css">
+
+
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-extra-markers/1.2.1/css/leaflet.extra-markers.min.css"> -->
+    <link rel="stylesheet" href="/node_modules/leaflet-extra-markers/dist/css/leaflet.extra-markers.min.css">
+
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"> -->
+    <link rel="stylesheet" href="/node_modules/@fortawesome/fontawesome-free/css/all.min.css">
+
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
+
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.EasyButton/2.4.0/easy-button.min.css"> -->
+    <link rel="stylesheet" href="/node_modules/leaflet-easybutton/src/easy-button.css">
     
     <link rel="stylesheet" href="assets/css/style.css">
     
@@ -59,6 +73,10 @@
     #content {
     display: none; /* Hide the content initially */
     }
+    #wiki-Summ:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
     </style>
 </head>
 <body>
@@ -94,7 +112,7 @@
               Continent
             </td>
 
-            <td id="txtContinent" class="text-end">
+            <td id="txtContinent" class="text-end wrap">
               value
             </td>
 
@@ -109,7 +127,7 @@
               Country
             </td>
 
-            <td id="txtCountry" class="text-end">
+            <td id="txtCountry" class="text-end wrap">
               value
             </td>
 
@@ -124,7 +142,7 @@
               Capital
             </td>
 
-            <td id="txtCapital" class="text-end">
+            <td id="txtCapital" class="text-end wrap">
               value
             </td>
 
@@ -139,7 +157,7 @@
               Languages
             </td>
 
-            <td  id="txtLanguages" class="text-end">
+            <td  id="txtLanguages" class="text-end wrap">
               value
             </td>
 
@@ -154,7 +172,7 @@
               Population
             </td>
 
-            <td  id="txtPopulation"class="text-end">
+            <td  id="txtPopulation"class="text-end wrap">
               value
             </td>
 
@@ -169,7 +187,7 @@
               Currency
             </td>
 
-            <td  id="txtCurrency"class="text-end">
+            <td  id="txtCurrency"class="text-end wrap">
               not real
             </td>
 
@@ -184,7 +202,7 @@
               ISO alpha 3
             </td>
 
-            <td  id="txtISO"class="text-end">
+            <td  id="txtISO"class="text-end wrap">
               f
             </td>
 
@@ -199,7 +217,7 @@
               Area (km2) 
             </td>
 
-            <td  id="txtArea"class="text-end">
+            <td  id="txtArea"class="text-end wrap">
               not real
             </td>
 
@@ -214,34 +232,11 @@
               Country Code
             </td>
 
-            <td  id="txtCountryCode"class="text-end">
+            <td  id="txtCountryCode"class="text-end wrap">
               not real
             </td>
 
-          </tr>
-          <tr>
-            <td class="text-center">
-              <i class="fa-solid fa-clock fa-xl text-success"></i>
-            </td>        
-            <td>
-              Offset
-            </td>
-            <td id="txtOffset" class="text-end">
-              value
-            </td>
-          </tr>
-          
-          <tr>
-            <td class="text-center">
-              <i class="fa-solid fa-plane-lock fa-xl text-success"></i>
-            </td>
-            <td>
-              Time Zone
-            </td>
-            <td id="txtTimezone" class="text-end">
-              value
-            </td>
-          </tr>
+          </tr>         
           <tr>
             <td class="text-center">
               <i class="fa-solid fa-road fa-xl text-success"></i>
@@ -249,7 +244,7 @@
             <td>
               Drive on the
             </td>
-            <td id="txtRoad" class="text-end">
+            <td id="txtRoad" class="text-end wrap">
               value
             </td>
           </tr>
@@ -260,7 +255,7 @@
             <td>
               Speed in
             </td>
-            <td id="txtSpeed" class="text-end">
+            <td id="txtSpeed" class="text-end wrap">
               value
             </td>
           </tr>
@@ -292,7 +287,7 @@
               Offset
             </td>
 
-            <td id="txtOffset" class="text-end">
+            <td id="txtOffset" class="text-end wrap">
               value
             </td>
 
@@ -308,7 +303,7 @@
               Time Zone
             </td>
 
-            <td id="txtTimezone" class="text-end">
+            <td id="txtTimezone" class="text-end wrap">
               value
             </td>
 
@@ -331,12 +326,11 @@
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <table class="table table-striped"> 
+        <table class="table table-striped">
           <tr>     
-            <td id="wiki-page" class="text-start">
+            <td id="wiki-Summ" class="text-start">
               value
-            </td>
-          </tr>          
+            </td>         
         </table>
       </div>
       <div class="modal-footer">
@@ -366,7 +360,7 @@
               Drive on the
             </td>
 
-            <td id="txtRoad" class="text-end">
+            <td id="txtRoad" class="text-end wrap">
               value
             </td>
 
@@ -381,7 +375,7 @@
               Speed in
             </td>
 
-            <td id="txtSpeed" class="text-end">
+            <td id="txtSpeed" class="text-end wrap">
               value
             </td>
 
@@ -396,7 +390,7 @@
 </div>
 
 
-<div id="weatherModal" class="fade modal" aria-hidden="true" aria-labelledby="weatherModalLabel" data-bs-backdrop="false" data-bs-keyboard="false" tabindex="-1">
+<div id="weatherModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="weatherModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content shadow">
       <div class="modal-header bg-success bg-gradient text-white">
@@ -406,35 +400,54 @@
       <div class="modal-body">
         <div class="container">
           <div class="row mb-3">
-            <div class="col border m-2">
-              <p class="fw-bold fs-5 mt-1">Today</p>
-              <div class="d-flex justify-content-between">
-                <span id="textIcon" class="text-start">value</span>
-                <span id="textWeather" class="mx-auto fw-bold fs-6">Main Weather</span>
-                <span id="textTemp" class="text-end">value</span>
+            <!-- Today -->
+            <div class="col border m-1">
+              <p class="fw-bold fs-5 mt-1 text-center">Today</p>
+              <div class="row align-items-center">
+                <div class="col text-center">
+                  <p id="textWeather" class="fw-bold fs-6"></p>
+                </div>
+                <div class="col text-center">
+                  <span id="textIcon" class="text-start">value</span>
+                </div>
+                <div class="col text-center">
+                  <p class="fw-bold fs-4 mb-0"><span id="textMaxTemp">Max</span></p>
+                  <p class="fs-5 mt-0 text-secondary"><span id="textMinTemp">Min</span></p>
+                </div>
               </div>
             </div>
           </div>
           <div class="row mb-3">
-            <div class="col-5 border m-2 light-grey-bg">
-              <div class="col text-center">
+            <!-- Tomorrow -->
+            <div class="col-5 border m-1 light-grey-bg">
+              <div class="text-center">
                 <p id="tomorrow" class="fw-bold fs-6 mt-3">Tomorrow</p>
               </div>
-              <div class="d-flex justify-content-between">
-                <span id="textWeather2" class="text-start text-center">value</span>
-                <span id="textIcon2" class="mx-auto">Main Weather</span>
-                <span id="textTemp2" class="text-end">value</span>
+              <div class="row align-items-center">                
+                <div class="col text-center">
+                  <span id="textIcon1" class="text-start">value</span>
+                </div>
+                <div class="col text-center">
+                  <p class="fw-bold fs-4 mb-0"><span id="textMaxTemp1">Max</span></p>
+                  <p class="fs-5 mt-0 text-secondary"><span id="textMinTemp1">Min</span></p>
+                </div>
               </div>
             </div>
+            <!-- Spacer -->
             <div class="col"></div>
-            <div class="col-5 border m-2 light-grey-bg">
-              <div class="col text-center">
+            <!-- Day After -->
+            <div class="col-5 border m-1 light-grey-bg">
+              <div class="text-center">
                 <p id="dayAfter" class="fw-bold fs-6 mt-3">Day After</p>
-              </div>              
-              <div class="d-flex justify-content-between">
-                <span id="textWeather3" class="text-start text-center">value</span>
-                <span id="textIcon3" class="mx-auto">Main Weather</span>
-                <span id="textTemp3" class="text-end">value</span>
+              </div>
+              <div class="row align-items-center">                
+                <div class="col text-center">
+                  <span id="textIcon2" class="text-start">value</span>
+                </div>
+                <div class="col text-center">
+                  <p class="fw-bold fs-4 mb-0"><span id="textMaxTemp2">Max</span></p>
+                  <p class="fs-5 mt-0 text-secondary"><span id="textMinTemp2">Min</span></p>
+                </div>
               </div>
             </div>
           </div>
@@ -446,6 +459,8 @@
     </div>
   </div>
 </div>
+
+
 
 <div id="newsModal" class="fade modal" data-bs-backdrop="false" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -530,7 +545,7 @@
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content shadow">
       <div class="modal-header bg-success bg-gradient text-white">
-        <h5 class="modal-title">Exchangev Rate</h5>
+        <h5 class="modal-title modal-sm">Exchange Rate</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -595,14 +610,31 @@
   </div>
 </div>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.8.0/leaflet.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.2/jquery.min.js "></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.6.1/toastify.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-extra-markers/1.2.1/js/leaflet.extra-markers.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.EasyButton/2.4.0/easy-button.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.8.0/leaflet.js"></script> -->
+<script src="/node_modules/leaflet/dist/leaflet.js"></script>
+
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.2/jquery.min.js "></script>-->
+<script src="/node_modules/jquery/dist/jquery.min.js"></script>
+
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.6.1/toastify.min.js"></script> -->
+<script src="/node_modules/toastify-js/src/toastify.js"></script>
+
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js"></script> -->
+<script src="/node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js"></script>
+
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-extra-markers/1.2.1/js/leaflet.extra-markers.js"></script>-->
+<script src="/node_modules/leaflet-extra-markers/dist/js/leaflet.extra-markers.js"></script>
+
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/js/bootstrap.min.js"></script> -->
+<script src="/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.EasyButton/2.4.0/easy-button.min.js"></script> -->
+<script src="/node_modules/leaflet-easybutton/src/easy-button.js"></script>
+
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>-->
+<script src="/node_modules/numeral/min/numeral.min.js"></script>
+
 <script src="assets/js/scripts.js"></script>
 
 <script type="text/javascript" src="assets/js/Datejs-master/src/date.js"></script>
