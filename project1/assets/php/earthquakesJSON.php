@@ -1,46 +1,58 @@
 <?php
 
-	// remove for production
+// remove for production
+ini_set('display_errors', 'On');
+error_reporting(E_ALL);
 
-	ini_set('display_errors', 'On');
-	error_reporting(E_ALL);
+// Check if required POST parameters are set
+if (isset($_POST['north']) && isset($_POST['south']) && isset($_POST['east']) && isset($_POST['west'])) {
 
-	$executionStartTime = microtime(true);
+    $executionStartTime = microtime(true);
 
-	$url = 'http://api.geonames.org/earthquakesJSON?north=' . $_POST['north'].'&south='. $_POST['south'].'&east='. $_POST['east'].'&west='. $_POST['west'].'&username=aidanfleming';
+    $url = 'http://api.geonames.org/earthquakesJSON?north=' . $_POST['north'] . '&south=' . $_POST['south'] . '&east=' . $_POST['east'] . '&west=' . $_POST['west'] . '&username=aidanfleming';
 
-	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	curl_setopt($ch, CURLOPT_URL,$url);
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_URL, $url);
 
-	$result=curl_exec($ch);
+    $result = curl_exec($ch);
 
-	curl_close($ch);
-	echo $result; exit();
-	$decode = json_decode($result,true);	
+    curl_close($ch);
+    echo $result; 
+    exit();
+    
+    $decode = json_decode($result, true);
 
-	if($decode) {
-		$output['status']['code'] = "200";
-		$output['status']['name'] = "ok";
-		$output['status']['description'] = "success";
-		$output['status']['returnedIn'] = intval((microtime(true) - $executionStartTime) * 1000) . " ms";
-		$output['data'] = $decode['geonames'];
-		
-		header('Content-Type: application/json; charset=UTF-8');
-	
-		echo json_encode($output); 
-	}
-	else {
-		$response = new stdClass();
-		$response->success = false;
-		$response->message = "lmao";
+    if ($decode) {
+        $output['status']['code'] = "200";
+        $output['status']['name'] = "ok";
+        $output['status']['description'] = "success";
+        $output['status']['returnedIn'] = intval((microtime(true) - $executionStartTime) * 1000) . " ms";
+        $output['data'] = $decode['geonames'];
 
-		header('Content-Type: application/json; charset=UTF-8');
-	
-		echo json_encode($response); 
-	}
+        header('Content-Type: application/json; charset=UTF-8');
 
-	
+        echo json_encode($output);
+    } else {
+        $response = new stdClass();
+        $response->success = false;
+        $response->message = "lmao";
+
+        header('Content-Type: application/json; charset=UTF-8');
+
+        echo json_encode($response);
+    }
+
+} else {
+    http_response_code(400); // Bad Request
+    $response = new stdClass();
+    $response->success = false;
+    $response->message = "Missing required parameters.";
+
+    header('Content-Type: application/json; charset=UTF-8');
+
+    echo json_encode($response);
+}
 
 ?>
