@@ -216,6 +216,7 @@ $('#countrySelect').change(function () {
   //get coordinates using open cage and full country name
   getSelectedCountryCoords(countryName, countryCode);
   getWiki(countryName)
+  console.log(countryName);
 
   
 
@@ -292,7 +293,11 @@ function getWiki(countryName){
         search: countryName
       },
       success: function(result) {                     
-        const geonames = result['query']["pages"]['31717'];
+        const pages = result.query.pages;
+        const pageId = Object.keys(pages)[0];
+        const geonames = pages[pageId];
+        console.log(countryName);
+        console.log(geonames);
         
         if(geonames.fullurl) {
           $('#wiki-Summ').html(geonames.extract);
@@ -308,7 +313,7 @@ function getWiki(countryName){
       }
     }); 
     $('.pre-load').addClass("fadeOut");
-  }
+}
 
 // Time Modal
 function getTime(latitude, longitude){
