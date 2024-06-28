@@ -215,10 +215,7 @@ $('#countrySelect').change(function () {
 
   //get coordinates using open cage and full country name
   getSelectedCountryCoords(countryName, countryCode);
-  getWiki(countryName)
-  console.log(countryName);
-
-  
+  getWiki(countryName)  
 
 });
 
@@ -296,8 +293,6 @@ function getWiki(countryName){
         const pages = result.query.pages;
         const pageId = Object.keys(pages)[0];
         const geonames = pages[pageId];
-        console.log(countryName);
-        console.log(geonames);
         
         if(geonames.fullurl) {
           $('#wiki-Summ').html(geonames.extract);
