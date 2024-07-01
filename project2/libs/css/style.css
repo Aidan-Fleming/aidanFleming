@@ -1,0 +1,40 @@
+html,
+body {
+  background-color: #f9f6ee;
+  margin: 5px 0px 5px 2px;
+  padding: 5px 0px 5px 2px;
+  overflow: hidden;
+}
+
+section {
+  display: flex;
+  flex-flow: column;
+  height: calc(100vh - 20px);
+}
+
+.tab-content {
+  flex: 1;
+  overflow-y: scroll;
+}
+
+tr {
+  cursor: default;
+}
+
+.myBtn {
+  width: 70px;
+}
+.nav-tabs {
+      display: flex;
+      justify-content: center;
+}
+.nav-tabs .nav-link {
+      background-color: #198754; /* Bootstrap success color */
+      border-color: #000; /* Bootstrap black color */
+      color: #fff; /* Bootstrap white color */
+}
+.nav-tabs .nav-link.active {
+      background-color: #616161; /* Bootstrap Secondary color */
+      border-color: #000; /* Bootstrap black color */
+      color: #fff; /* Bootstrap white color */
+}
