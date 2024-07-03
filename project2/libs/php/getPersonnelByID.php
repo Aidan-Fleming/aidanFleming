@@ -16,7 +16,8 @@
 
 	$conn = new mysqli($cd_host, $cd_user, $cd_password, $cd_dbname, $cd_port, $cd_socket);
 
-	if (mysqli_connect_errno()) {console.log("FIRST ERROR")
+	if (mysqli_connect_errno()) {
+		$output['status']['message'] = "FIRST ERROR";
 		
 		$output['status']['code'] = "300";
 		$output['status']['name'] = "failure";
@@ -42,7 +43,7 @@
 	$query->execute();
 	
 	if (false === $query) {
-		console.log("SECOND ERROR")
+		$output['status']['message'] = "SECOND ERROR";
 
 		$output['status']['code'] = "400";
 		$output['status']['name'] = "executed";
@@ -74,7 +75,7 @@
 	$result = $conn->query($query);
 	
 	if (!$result) {
-		console.log("THIRD ERROR")
+		$output['status']['message'] = "THIRD ERROR";
 
 		$output['status']['code'] = "400";
 		$output['status']['name'] = "executed";

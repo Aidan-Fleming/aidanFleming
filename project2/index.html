@@ -122,16 +122,16 @@ tr {
       
                 <tr>
                   <td class="align-middle text-nowrap">
-                    Ace, Tamarra
+                    (Last name) , (First Name)
                   </td>
                   <td class="align-middle text-nowrap d-none d-md-table-cell">
-                    Support
+                    (Department)
                   </td>
                   <td class="align-middle text-nowrap d-none d-md-table-cell">
-                    Munich
+                    (Location)
                   </td>
                   <td class="align-middle text-nowrap d-none d-md-table-cell">
-                    tacem@vinaora.com
+                    (email)
                   </td>
                   <td class="text-end text-nowrap">
                     <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-id="23">
@@ -288,9 +288,58 @@ tr {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/js/bootstrap.min.js"></script>
     <!--<script src="/node_modules/bootstrap/dist/js/bootstrap.min.js"></script> -->
 
-    <!--<script src="/libs/js/scripts.js"></script>-->
+    <script src="libs/js/scripts.js"></script>
 
-    <script>
+    <!--<script>
+      document.addEventListener('DOMContentLoaded', function() {
+        fetch('libs/php/getAllDepartments.php')
+        .then(response => response.json())
+        .then(data => {
+            if (data.status.code === "200") {
+                const departmentTableBody = document.getElementById('departmentTableBody');
+                data.data.forEach(department => {
+                    const row = document.createElement('tr');
+
+                    const nameCell = document.createElement('td');
+                    nameCell.className = 'align-middle text-nowrap';
+                    nameCell.textContent = department.name;
+
+                    const locationCell = document.createElement('td');
+                    locationCell.className = 'align-middle text-nowrap d-none d-md-table-cell';
+                    locationCell.textContent = department.locationID; // Assuming locationID is the location name. Adjust if needed.
+
+                    const actionCell = document.createElement('td');
+                    actionCell.className = 'align-middle text-end text-nowrap';
+
+                    const editButton = document.createElement('button');
+                    editButton.type = 'button';
+                    editButton.className = 'btn btn-success btn-sm';
+                    editButton.setAttribute('data-bs-toggle', 'modal');
+                    editButton.setAttribute('data-bs-target', '#editDepartmentModal');
+                    editButton.setAttribute('data-id', department.id);
+                    editButton.innerHTML = '<i class="fa-solid fa-pencil fa-fw"></i>';
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.type = 'button';
+                    deleteButton.className = 'btn btn-success btn-sm deleteDepartmentBtn';
+                    deleteButton.setAttribute('data-id', department.id);
+                    deleteButton.innerHTML = '<i class="fa-solid fa-trash fa-fw"></i>';
+
+                    actionCell.appendChild(editButton);
+                    actionCell.appendChild(deleteButton);
+
+                    row.appendChild(nameCell);
+                    row.appendChild(locationCell);
+                    row.appendChild(actionCell);
+
+                    departmentTableBody.appendChild(row);
+                });
+            } else {
+                console.error('Failed to fetch departments:', data.status.description);
+            }
+        })
+        .catch(error => console.error('Error fetching departments:', error));
+});
     $("#searchInp").on("keyup", function () {
   
   // your code
@@ -353,7 +402,7 @@ $("#personnelBtn").click(function () {
                                     ${person.jobTitle}
                                 </td>
                                 <td class="align-middle text-nowrap d-none d-md-table-cell">
-                                    ${person.departmentID} <!-- You may want to convert this to department name -->
+                                    ${person.departmentID}
                                 </td>
                                 <td class="align-middle text-nowrap d-none d-md-table-cell">
                                     ${person.email}
@@ -459,6 +508,6 @@ $("#editPersonnelForm").on("submit", function (e) {
   // AJAX call to save form data
   
 });
-    </script>
+    </script>-->
 </body>
 </html>

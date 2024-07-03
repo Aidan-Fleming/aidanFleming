@@ -1,3 +1,160 @@
+document.addEventListener('DOMContentLoaded', function() {
+  fetch('libs/php/getAllDepartments.php')
+  .then(response => response.json())
+  .then(data => {
+      if (data.status.code === "200") {
+          const departmentTableBody = document.getElementById('departmentTableBody');
+          data.data.forEach(department => {
+              const row = document.createElement('tr');
+
+              const nameCell = document.createElement('td');
+              nameCell.className = 'align-middle text-nowrap';
+              nameCell.textContent = department.name;
+
+              const locationCell = document.createElement('td');
+              locationCell.className = 'align-middle text-nowrap d-none d-md-table-cell';
+              locationCell.textContent = department.locationID; // Assuming locationID is the location name. Adjust if needed.
+
+              const actionCell = document.createElement('td');
+              actionCell.className = 'align-middle text-end text-nowrap';
+
+              const editButton = document.createElement('button');
+              editButton.type = 'button';
+              editButton.className = 'btn btn-success btn-sm';
+              editButton.setAttribute('data-bs-toggle', 'modal');
+              editButton.setAttribute('data-bs-target', '#editDepartmentModal');
+              editButton.setAttribute('data-id', department.id);
+              editButton.innerHTML = '<i class="fa-solid fa-pencil fa-fw"></i>';
+
+              const deleteButton = document.createElement('button');
+              deleteButton.type = 'button';
+              deleteButton.className = 'btn btn-success btn-sm deleteDepartmentBtn';
+              deleteButton.setAttribute('data-id', department.id);
+              deleteButton.innerHTML = '<i class="fa-solid fa-trash fa-fw"></i>';
+
+              actionCell.appendChild(editButton);
+              actionCell.appendChild(deleteButton);
+
+              row.appendChild(nameCell);
+              row.appendChild(locationCell);
+              row.appendChild(actionCell);
+
+              departmentTableBody.appendChild(row);
+          });
+      } else {
+          console.error('Failed to fetch departments:', data.status.description);
+      }
+  })
+  .catch(error => console.error('Error fetching departments:', error));
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  fetch('libs/php/getAllPersonnels.php')
+      .then(response => response.json())
+      .then(data => {
+          if (data.status.code === "200") {
+              const personnelTableBody = document.getElementById('personnelTableBody');
+              data.data.forEach(person => {
+                  const row = document.createElement('tr');
+
+                  const nameCell = document.createElement('td');
+                  nameCell.className = 'align-middle text-nowrap';
+                  nameCell.textContent = `${person.lastName}, ${person.firstName}`;
+
+                  const departmentCell = document.createElement('td');
+                  departmentCell.className = 'align-middle text-nowrap d-none d-md-table-cell';
+                  departmentCell.textContent = `${person.department}`;
+
+                  const locationCell = document.createElement('td');
+                  locationCell.className = 'align-middle text-nowrap d-none d-md-table-cell';
+                  locationCell.textContent = `${person.location}`;
+
+                  const emailCell = document.createElement('td');
+                  emailCell.className = 'align-middle text-nowrap d-none d-md-table-cell';
+                  emailCell.textContent = `${person.email}`;
+
+                  const actionCell = document.createElement('td');
+                  actionCell.className = 'text-end text-nowrap';
+
+                  const editButton = document.createElement('button');
+                  editButton.type = 'button';
+                  editButton.className = 'btn btn-success btn-sm';
+                  editButton.setAttribute('data-bs-toggle', 'modal');
+                  editButton.setAttribute('data-bs-target', '#editPersonnelModal');
+                  editButton.setAttribute('data-id', person.id);
+                  editButton.innerHTML = '<i class="fa-solid fa-pencil fa-fw"></i>';
+
+                  const deleteButton = document.createElement('button');
+                  deleteButton.type = 'button';
+                  deleteButton.className = 'btn btn-success btn-sm';
+                  deleteButton.setAttribute('data-bs-toggle', 'modal');
+                  deleteButton.setAttribute('data-bs-target', '#deletePersonnelModal');
+                  deleteButton.setAttribute('data-id', person.id);
+                  deleteButton.innerHTML = '<i class="fa-solid fa-trash fa-fw"></i>';
+
+                  actionCell.appendChild(editButton);
+                  actionCell.appendChild(deleteButton);
+
+                  row.appendChild(nameCell);
+                  row.appendChild(departmentCell);
+                  row.appendChild(locationCell);
+                  row.appendChild(emailCell);
+                  row.appendChild(actionCell);
+
+                  personnelTableBody.appendChild(row);
+              });
+          } else {
+              console.error('Failed to fetch personnel:', data.status.description);
+          }
+      })
+      .catch(error => console.error('Error fetching personnel:', error));
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  fetch("libs/php/getAllLocations.php")
+  .then(response => response.json())
+  .then(data => {
+      if (data.status.code === "200") {
+          const locationTableBody = document.getElementById('locationTableBody');
+          data.data.forEach(location => {
+              const row = document.createElement('tr');
+
+              const nameCell = document.createElement('td');
+              nameCell.className = 'align-middle text-nowrap';
+              nameCell.textContent = location.name;
+
+              const actionCell = document.createElement('td');
+              actionCell.className = 'align-middle text-end text-nowrap';
+
+              const editButton = document.createElement('button');
+              editButton.type = 'button';
+              editButton.className = 'btn btn-success btn-sm';
+              editButton.setAttribute('data-bs-toggle', 'modal');
+              editButton.setAttribute('data-bs-target', '#editLocationModal');
+              editButton.setAttribute('data-id', location.id);
+              editButton.innerHTML = '<i class="fa-solid fa-pencil fa-fw"></i>';
+
+              const deleteButton = document.createElement('button');
+              deleteButton.type = 'button';
+              deleteButton.className = 'btn btn-success btn-sm deleteLocationBtn';
+              deleteButton.setAttribute('data-id', location.id);
+              deleteButton.innerHTML = '<i class="fa-solid fa-trash fa-fw"></i>';
+
+              actionCell.appendChild(editButton);
+              actionCell.appendChild(deleteButton);
+
+              row.appendChild(nameCell);
+              row.appendChild(actionCell);
+
+              locationTableBody.appendChild(row);
+          });
+      } else {
+          console.error('Failed to fetch locations:', data.status.description);
+      }
+  })
+  .catch(error => console.error('Error fetching locations:', error));
+});
+
 $("#searchInp").on("keyup", function () {
   
     // your code
@@ -37,56 +194,13 @@ $("#searchInp").on("keyup", function () {
     // Replicate the logic of the refresh button click to open the add modal for the table that is currently on display
     
   });
-  
-$("#personnelBtn").click(function () {
-  console.log("click")
-    // Make an AJAX call to the PHP function
-    $.ajax({
-        url: 'libs/php/getPersonnelByID.php',
-        type: 'GET',
-        dataType: 'json',
-        success: function (response) {
-            if (response.status.code === "200") {
-                // Clear the existing table body
-                $("#personnelTableBody").empty();
 
-                // Loop through the personnel data and append rows to the table
-                response.data.personnel.forEach(function (person) {
-                    var row = `
-                        <tr>
-                            <td class="align-middle text-nowrap">
-                                ${person.firstName}, ${person.lastName}
-                            </td>
-                            <td class="align-middle text-nowrap d-none d-md-table-cell">
-                                ${person.jobTitle}
-                            </td>
-                            <td class="align-middle text-nowrap d-none d-md-table-cell">
-                                ${person.departmentID} <!-- You may want to convert this to department name -->
-                            </td>
-                            <td class="align-middle text-nowrap d-none d-md-table-cell">
-                                ${person.email}
-                            </td>
-                            <td class="text-end text-nowrap">
-                                <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#editPersonnelModal" data-id="${person.id}">
-                                    <i class="fa-solid fa-pencil fa-fw"></i>
-                                </button>
-                                <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#deletePersonnelModal" data-id="${person.id}">
-                                    <i class="fa-solid fa-trash fa-fw"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    `;
-                    $("#personnelTableBody").append(row);
-                });
-            } else {
-                console.error('Failed to fetch data:', response.status.description);
-            }
-        },
-        error: function (xhr, status, error) {
-            console.error('AJAX Error:', error);
-        }
-    });
-});
+  $("#personnelBtn").click(function () {
+    
+    // Call function to refresh peronsal table
+    
+  });  
+
   
   $("#departmentsBtn").click(function () {
     
