@@ -41,15 +41,16 @@
  
     // SQL does not accept parameters and so is not prepared 
 
-    $query = 'SELECT personnel.lastName, personnel.firstName, department.name, location.name, personnel.email
+    $query = 'SELECT personnel.id, personnel.lastName, personnel.firstName, department.name AS departmentName, location.name AS locationName, personnel.email
     FROM personnel
-    INNER JOIN department ON personnel.departmentID = department.id
-    INNER JOIN location ON department.locationID = location.id
-    ORDER BY `personnel`.`lastName` ASC;';
+    LEFT JOIN department ON personnel.departmentID = department.id
+    LEFT JOIN location ON department.locationID = location.id
+    ORDER BY personnel.lastName ASC;';
     
     $result = $conn->query($query);
 
     if (!$result) {
+      
                    $output['status']['code'] = "400";
                    $output['status']['name'] = "executed";
                    $output['status']['description'] = "query failed";  
@@ -68,6 +69,7 @@ $data = [];
     while ($row = mysqli_fetch_assoc($result)) {
          array_push($data, $row);
     }
+    
 
     $output['status']['code'] = "200";
     $output['status']['name'] = "ok";

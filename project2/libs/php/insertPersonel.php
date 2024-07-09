@@ -1,6 +1,7 @@
 <?php
+
 // example use from browser
-// http://localhost/companydirectory/libs/php/searchAll.php?txt=<txt>
+// http://localhost/companydirectory/libs/php/insertDepartment.php?name=New%20Department&locationID=<id>
 
 // remove next two lines for production
 ini_set('display_errors', 'On');
@@ -8,18 +9,8 @@ error_reporting(E_ALL);
 
 $executionStartTime = microtime(true);
 
-//include("config.php");
-
-$cd_host = "127.0.0.1";
-$cd_port = 3306;
-$cd_socket = "";
-
-// database name, username and password
-
-$cd_dbname = "companydirectory";
-$cd_user = 'root';
-$cd_password = ''; 
-
+// this includes the login details
+include("config.php");
 
 header('Content-Type: application/json; charset=UTF-8');
 
@@ -39,15 +30,15 @@ if (mysqli_connect_errno()) {
     exit;
 }
 
-$query = $conn->prepare('SELECT `p`.`id`, `p`.`firstName`, `p`.`lastName`, `p`.`email`, `p`.`jobTitle`, `d`.`id` as `departmentID`, `d`.`name` AS `departmentName`, `l`.`id` as `locationID`, `l`.`name` AS `locationName` FROM `personnel` `p` LEFT JOIN `department` `d` ON (`d`.`id` = `p`.`departmentID`) LEFT JOIN `location` `l` ON (`l`.`id` = `d`.`locationID`) WHERE `p`.`firstName` LIKE ? OR `p`.`lastName` LIKE ? ORDER BY `p`.`lastName`, `p`.`firstName`');
+// SQL statement accepts parameters and so is prepared to avoid SQL injection.
+// $_REQUEST used for development / debugging. Remember to change to $_POST for production
+$query = $conn->prepare('INSERT INTO personnel (firstName, lastName, departmentID, email) VALUES(?, ?, ?, ?)');
 
-$likeText = "%" . $_REQUEST['txt'] . "%";
-
-$query->bind_param("ss", $likeText, $likeText);
+$query->bind_param("ssis", $_POST['firstName'], $_POST['lastName'], $_POST['departmentID'], $_POST['email']);
 
 $query->execute();
 
-if (false === $query) {
+if ($query === false) {
     $output['status']['code'] = "400";
     $output['status']['name'] = "executed";
     $output['status']['description'] = "query failed";    
@@ -60,21 +51,14 @@ if (false === $query) {
     exit;
 }
 
-$result = $query->get_result();
-
-$found = [];
-
-while ($row = mysqli_fetch_assoc($result)) {
-    array_push($found, $row);
-}
-
 $output['status']['code'] = "200";
 $output['status']['name'] = "ok";
 $output['status']['description'] = "success";
 $output['status']['returnedIn'] = (microtime(true) - $executionStartTime) / 1000 . " ms";
-$output['data']['found'] = $found;
+$output['data'] = [];
 
 mysqli_close($conn);
 
 echo json_encode($output); 
+
 ?>

@@ -1,6 +1,4 @@
-<?php
-
- 
+<?php 
 
     // example use from browser
     // http://localhost/companydirectory/libs/php/getAllDepartments.php
