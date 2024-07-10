@@ -110,11 +110,11 @@ function populatePersonnel(query = '') {
         type: 'POST',
         data: { id: personnelId },
         success: function(response) {
-          // The response is already an object, so no need to parse it
+         
           if (response.status.code === "200") {
             alert("Personnel deleted successfully.");
-            // Optionally, you can remove the button or the personnel row from the UI
-            populatePersonnel(); // Re-populate the table
+            
+            populatePersonnel();
             $('#deletePersonnelModal').modal('hide');
           } else {
             alert("Failed to delete the personnel: " + response.status.description);
