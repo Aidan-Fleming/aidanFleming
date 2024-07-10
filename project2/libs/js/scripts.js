@@ -60,7 +60,7 @@ function populatePersonnel(query = '') {
               const personnelId = this.getAttribute('data-id');
               console.log(personnelId);
               window.personnelToDelete = personnelId;
-              $('#deletePersonnelModal').modal('show');
+              $('#delConfirmPersonel').modal('show');
             });
 
             // Add event listener to edit button
@@ -106,7 +106,7 @@ function populatePersonnel(query = '') {
 
       // AJAX call to delete the personnel
       $.ajax({
-        url: 'libs/php/deletePersonnelByID.php', // Update this to the actual path of your PHP file
+        url: 'libs/php/deletePersonelByID.php', // Update this to the actual path of your PHP file
         type: 'POST',
         data: { id: personnelId },
         success: function(response) {
@@ -127,7 +127,6 @@ function populatePersonnel(query = '') {
     });
   });
 }
-
 
 function populateDepartments(query = '') {
   fetch('libs/php/getAllDepartments.php')
@@ -467,9 +466,28 @@ $(document).ready(function() {
       // Get the values from the form fields
       const firstName = $("#editPersonnelFirstName").val();
       const lastName = $("#editPersonnelLastName").val();
-      const departmentID = $("#editPersonnelDepartment").val();
+      const departmentName = $("#editPersonnelDepartment").val();
       const email = $("#editPersonnelEmailAddress").val();
       const personnelId = $("#editPersonnelEmployeeID").val(); // Retrieve the personnel ID from the hidden input
+
+      // Create a mapping object from department names to IDs
+      var nameToDepartmentID = {
+          "Human Resources": "1",
+          "Sales": "2",
+          "Marketing": "3",
+          "Legal": "4",
+          "Services": "5",
+          "Research and Development": "6",
+          "Product Management": "7",
+          "Training": "8",
+          "Support": "9",
+          "Engineering": "10",
+          "Accounting": "11",
+          "Business Development": "12"
+      };
+      
+      // Map department name to department ID
+      var departmentID = nameToDepartmentID[departmentName] || "Unknown";
 
       // Log the values to the console for debugging
       console.log('Personnel ID:', personnelId);
@@ -538,20 +556,20 @@ $("#filterSubmitBtn").click(function () {
   
 $(document).ready(function() {
   $("#addBtn").click(function() {
+    let targetModal = '';
+    
     if ($("#personnelBtn").hasClass("active")) {
-      $("#addBtn").attr("data-bs-target", "#insertPersonnelModal");
+      targetModal = "#insertPersonnelModal";
     } else if ($("#departmentsBtn").hasClass("active")) {
-      $("#addBtn").attr("data-bs-target", "#insertDepartmentModal");
+      targetModal = "#insertDepartmentModal";
     } else if ($("#locationsBtn").hasClass("active")) {
-      $("#addBtn").attr("data-bs-target", "#insertLocationModal");
-    } else {
-      $("#addBtn").removeAttr("data-bs-target");
+      targetModal = "#insertLocationModal";
     }
-  });
-
-  // Event listener to clear data-bs-target if no tab is active when modal is dismissed
-  $(".modal").on("hidden.bs.modal", function() {
-    $("#addBtn").removeAttr("data-bs-target");
+    
+    if (targetModal) {
+      // Manually show the modal
+      $(targetModal).modal('show');
+    }
   });
 });
 
@@ -714,76 +732,7 @@ $(document).ready(function() {
     populateLocations();
     
   });
-  
-  $("#editPersonnelModal").on("show.bs.modal", function (e) {
-    
-    $.ajax({
-      url:
-        "https://coding.itcareerswitch.co.uk/companydirectory/libs/php/getPersonnelByID.php",
-      type: "POST",
-      dataType: "json",
-      data: {
-        // Retrieve the data-id attribute from the calling button
-        // see https://getbootstrap.com/docs/5.0/components/modal/#varying-modal-content
-        // for the non-jQuery JavaScript alternative
-        id: $(e.relatedTarget).attr("data-id") 
-      },
-      success: function (result) {
-        var resultCode = result.status.code;
-  
-        if (resultCode == 200) {
-          
-          // Update the hidden input with the employee id so that
-          // it can be referenced when the form is submitted
-  
-          $("#editPersonnelEmployeeID").val(result.data.personnel[0].id);
-  
-          $("#editPersonnelFirstName").val(result.data.personnel[0].firstName);
-          $("#editPersonnelLastName").val(result.data.personnel[0].lastName);
-          $("#editPersonnelJobTitle").val(result.data.personnel[0].jobTitle);
-          $("#editPersonnelEmailAddress").val(result.data.personnel[0].email);
-  
-          $("#editPersonnelDepartment").html("");
-  
-          $.each(result.data.department, function () {
-            if (this.name !== "Not used") {
-              $("#editPersonnelDepartment").append(
-                $("<option>", {
-                  value: this.id,
-                  text: this.name
-                })
-              );
-            }
-          });
-  
-          $("#editPersonnelDepartment").val(result.data.personnel[0].departmentID);
-          
-        } else {
-          $("#editPersonnelModal .modal-title").replaceWith(
-            "Error retrieving data"
-          );
-        }
-      },
-      error: function (jqXHR, textStatus, errorThrown) {
-        $("#editPersonnelModal .modal-title").replaceWith(
-          "Error retrieving data"
-        );
-      }
-    });
-  });
-  
-  // Executes when the form button with type="submit" is clicked
-  
-  $("#editPersonnelForm").on("submit", function (e) {
-    
-    // Executes when the form button with type="submit" is clicked
-    // stop the default browser behviour
-  
-    e.preventDefault();
-  
-    // AJAX call to save form data
-    
-  });
+
 
  // Filter Button Here
   document.addEventListener('DOMContentLoaded', function() {
@@ -854,6 +803,20 @@ $(document).ready(function() {
                         }
                     });
 
+                    // Populate editPersonnelDepartment dropdown
+                    const editPersonnelDepartmentDropdown = document.querySelector("#editPersonnelDepartment");
+                    editPersonnelDepartmentDropdown.innerHTML = "";
+
+                    // Populate dropdown options
+                    data.data.forEach(item => {
+                        if (item.departmentName !== "Not used") {
+                            const option = document.createElement("option");
+                            option.value = item.departmentName;
+                            option.textContent = item.departmentName;
+                            editPersonnelDepartmentDropdown.appendChild(option);
+                        }
+                    });
+
                 } else {
                     // Handle error for filterModalDepartment dropdown
                     document.querySelector("#filterModalDepartment").innerHTML = '<option value="">Error retrieving departments</option>';
@@ -861,6 +824,8 @@ $(document).ready(function() {
                     document.querySelector("#insertPersonnelDepartment").innerHTML = '<option value="">Error retrieving departments</option>';
                     // Handle error for editDepartmentDropdown
                     document.querySelector("#editDepartmentDropdown").innerHTML = '<option value="">Error retrieving departments</option>';
+                    // Handle error for editPersonnelDepartment dropdown
+                    document.querySelector("#editPersonnelDepartment").innerHTML = '<option value="">Error retrieving departments</option>';
                 }
             })
             .catch(error => {
@@ -870,6 +835,8 @@ $(document).ready(function() {
                 document.querySelector("#insertPersonnelDepartment").innerHTML = '<option value="">Error retrieving departments</option>';
                 // Handle fetch error for editDepartmentDropdown
                 document.querySelector("#editDepartmentDropdown").innerHTML = '<option value="">Error retrieving departments</option>';
+                // Handle fetch error for editPersonnelDepartment dropdown
+                document.querySelector("#editPersonnelDepartment").innerHTML = '<option value="">Error retrieving departments</option>';
             });
     }
 
