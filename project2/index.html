@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Company Directory</title>
 
-    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">-->
-    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
-    <!--<link rel="stylesheet" href="/node_modules/@fortawesome/fontawesome-free/css/all.min.css">-->
+    <!--<link rel="stylesheet" href="/node_modules/@fortawesome/fontawesome-free/css/all.min.css"> -->
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <!--<link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css"> -->
 
     <!--<link rel="stylesheet" href="/libs/css/style.css">-->
     <style>
@@ -381,7 +381,7 @@ tr {
         </div>
       </div>
       
-      <div id="insertPersonnelModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="insertPersonnelLabel" aria-hidden="true">
+      <div id="insertPersonnelModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content shadow">
                 <div class="modal-header bg-success bg-gradient text-white">
@@ -389,7 +389,7 @@ tr {
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="insertPersonnelForm">
+                    <form id="filterModalForm">
                         <input type="hidden" id="insertPersonnelEmployeeID" name="employeeID">
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control" id="insertPersonnelFirstName" name="firstName" placeholder="First name" required>
@@ -417,84 +417,89 @@ tr {
                 </div>
             </div>
         </div>
-    </div>
-    
-    <!-- Department Modal -->
-    <div id="insertDepartmentModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="insertDepartmentLabel" aria-hidden="true">
-        <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content shadow">
-                <div class="modal-header bg-success bg-gradient text-white">
-                    <h5 class="modal-title">Add Department</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="insertDepartmentForm">
-                        <input type="hidden" id="insertDepartmentID">
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="insertDepartmentName" placeholder="Department name" required>
-                            <label for="insertDepartmentName">Department Name</label>
-                        </div>
-                        <div class="form-floating mb-3">
-                            <select class="form-select" id="insertDepartmentLocation" name="location">
-                                <!-- Options will be populated dynamically -->
-                            </select>
-                            <label for="insertDepartmentLocation">Location</label>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-success btn-sm myBtn" id="insertDepartmentBtn">INSERT</button>
-                    <button type="button" class="btn btn-outline-success btn-sm myBtn" data-bs-dismiss="modal">CANCEL</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Location Modal -->
-    <div id="insertLocationModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="insertLocationLabel" aria-hidden="true">
-        <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content shadow">
-                <div class="modal-header bg-success bg-gradient text-white">
-                    <h5 class="modal-title">Add Location</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="insertLocationForm">
-                        <input type="hidden" id="insertLocationID">
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="insertLocationName" placeholder="Location name" required>
-                            <label for="insertLocationName">Location Name</label>
-                        </div>  
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-success btn-sm myBtn" id="insertLocationBtn">INSERT</button>
-                    <button type="button" class="btn btn-outline-success btn-sm myBtn" data-bs-dismiss="modal">CANCEL</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-      <div id="delConfirmPersonel" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      </div>    
+      
+      <div id="insertDepartmentModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
           <div class="modal-content shadow">
             <div class="modal-header bg-success bg-gradient text-white">
-              <h5 class="modal-title">Delete Employee Record</h5>
+              <h5 class="modal-title">Add Department</h5>
               <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
       
             <div class="modal-body">
-              <p>Are you sure you want to this Employee?</p>
+              <form id="filterModalForm">
+                <input type="hidden" id="insertDepartmentID">
+
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="insertDepartmentName" placeholder="Department name" required>
+                  <label for="insertDepartmentName">Department Name</label>
+                </div>              
+
+      
+                <div class="form-floating mb-3">
+                  <select class="form-select" id="insertDepartmentLocation" name="location">
+                    <!-- Options will be populated dynamically -->
+                  </select>
+                  <label for="insertDepartmentLocation">Location</label>
+                </div>
+              </form>
             </div>
       
             <div class="modal-footer">
-              <button type="button" class="btn btn-outline-success btn-sm myBtn" id="delConfirmPersonnelBtn">YES</button>
+              <button type="button" class="btn btn-outline-success btn-sm myBtn" id="insertDepartmentBtn">INSERT</button>
               <button type="button" class="btn btn-outline-success btn-sm myBtn" data-bs-dismiss="modal">CANCEL</button>
             </div>
           </div>
         </div>
       </div>
 
+      <div id="insertLocationModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content shadow">
+            <div class="modal-header bg-success bg-gradient text-white">
+              <h5 class="modal-title">Add Location</h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+      
+            <div class="modal-body">
+              <form id="filterModalForm">
+                <input type="hidden" id="insertLocationID">
+
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="insertLocationName" placeholder="Location name" required>
+                  <label for="insertLocationName">Location Name</label>
+                </div>  
+              </form>
+            </div>
+      
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-success btn-sm myBtn" id="insertLocationBtn">INSERT</button>
+              <button type="button" class="btn btn-outline-success btn-sm myBtn" data-bs-dismiss="modal">CANCEL</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="delConfirmPersonel" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content shadow">
+          <div class="modal-header bg-success bg-gradient text-white">
+          <h5 class="modal-title">Delete Employee Record</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          <p>Are you sure you want to delete this Employee?</p>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-success btn-sm myBtn" id="delConfirmPersonnelBtn">YES</button>
+          <button type="button" class="btn btn-outline-success btn-sm myBtn" data-bs-dismiss="modal">CANCEL</button>
+        </div>
+      </div>
+    </div>
+      </div>
       <div id="delConfirmDepartment" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
           <div class="modal-content shadow">
@@ -504,7 +509,7 @@ tr {
             </div>
       
             <div class="modal-body">
-              <p>Are you sure you want to this Department?</p>
+              <p>Are you sure you want to delete this Department?</p>
             </div>
       
             <div class="modal-footer">
@@ -524,7 +529,7 @@ tr {
             </div>
       
             <div class="modal-body">
-              <p>Are you sure you want to this Location?</p>
+              <p>Are you sure you want to delete this Location?</p>
             </div>
       
             <div class="modal-footer">
@@ -536,11 +541,10 @@ tr {
       </div>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <!--<script src="/node_modules/jquery/dist/jquery.min.js"></script>-->
+    <!--<script src="/node_modules/jquery/dist/jquery.min.js"></script> -->
 
-    <!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>-->
-     <script src="bootstrap/bootstrap.min.js"></script> 
-     
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!--<script src="/node_modules/bootstrap/dist/js/bootstrap.min.js"></script> -->
 
     <script src="libs/js/scripts.js"></script>
 </body>

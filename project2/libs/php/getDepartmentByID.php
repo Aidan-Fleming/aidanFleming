@@ -12,15 +12,15 @@
 
 	// connection details for MySQL database
 
-	$cd_host = "127.0.0.1";
+	$cd_host = "db5016070809.hosting-data.io ";
 	$cd_port = 3306;
 	$cd_socket = "";
 
 	// database name, username and password
 
-	$cd_dbname = "companydirectory";
-	$cd_user = 'root';
-	$cd_password = '';
+	$cd_dbname = "dbs13090698";
+	$cd_user = 'dbu5591712';
+	$cd_password = 'Brown2025!';
 
 	header('Content-Type: application/json; charset=UTF-8');
 

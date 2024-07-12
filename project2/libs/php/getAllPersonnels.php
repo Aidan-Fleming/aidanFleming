@@ -10,21 +10,21 @@
 
     $executionStartTime = microtime(true);
 
-    //include("config.php");
+    // connection details for MySQL database
 
-    $cd_host = "127.0.0.1";
-    $cd_port = 3306;
-    $cd_socket = "";
+	$cd_host = "db5016070809.hosting-data.io";
+	$cd_port = 3306;
+	$cd_socket = "";
 
-    // database name, username and password
+	// database name, username and password
 
-    $cd_dbname = "companydirectory";
-    $cd_user = 'root';
-    $cd_password = '';
+	$cd_dbname = "dbs13090698";
+	$cd_username = "dbu5591712";
+	$cd_password = 'Brown2025!';
 
-    //header('Content-Type: application/json; charset=UTF-8');
+    header('Content-Type: application/json; charset=UTF-8');
 
-    $conn = new mysqli($cd_host, $cd_user, $cd_password, $cd_dbname, $cd_port, $cd_socket);
+    $conn = new mysqli($cd_host, $cd_username, $cd_password, $cd_dbname, $cd_port, $cd_socket);
 
 
     if (mysqli_connect_errno()) {                             
@@ -48,38 +48,36 @@
     ORDER BY personnel.lastName ASC;';
     
     $result = $conn->query($query);
-	
-	if (!$result) {
 
-		$output['status']['code'] = "400";
-		$output['status']['name'] = "executed";
-		$output['status']['description'] = "query failed";	
-		$output['data'] = [];
+    if (!$result) {
+      
+                   $output['status']['code'] = "400";
+                   $output['status']['name'] = "executed";
+                   $output['status']['description'] = "query failed";  
+                   $output['data'] = [];
 
-		mysqli_close($conn);
+                   mysqli_close($conn);
+                   echo json_encode($output);
 
-		echo json_encode($output); 
+                   exit;
+}
 
-		exit;
 
-	}
-   
-   	$data = [];
 
-	while ($row = mysqli_fetch_assoc($result)) {
+$data = []; 
 
-		array_push($data, $row);
+    while ($row = mysqli_fetch_assoc($result)) {
+         array_push($data, $row);
+    }
+    
 
-	}
+    $output['status']['code'] = "200";
+    $output['status']['name'] = "ok";
+    $output['status']['description'] = "success";
+    $output['status']['returnedIn'] = (microtime(true) - $executionStartTime) / 1000 . " ms";
+    $output['data'] = $data;            
 
-	$output['status']['code'] = "200";
-	$output['status']['name'] = "ok";
-	$output['status']['description'] = "success";
-	$output['status']['returnedIn'] = (microtime(true) - $executionStartTime) / 1000 . " ms";
-	$output['data'] = $data;
-	
-	mysqli_close($conn);
-
-	echo json_encode($output); 
+    mysqli_close($conn);
+    echo json_encode($output);
 
 ?>
