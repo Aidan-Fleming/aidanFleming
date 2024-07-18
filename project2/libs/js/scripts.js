@@ -58,7 +58,6 @@ function populatePersonnel(query = '') {
             // // Add event listener to delete button
             // deleteButton.addEventListener('click', function() {
             //   const personnelId = this.getAttribute('data-id');
-            //   console.log(personnelId);
             //   window.personnelToDelete = personnelId;
             //   $('#delConfirmPersonel').modal('show');
             // });
@@ -69,29 +68,34 @@ function populatePersonnel(query = '') {
             deleteButton.setAttribute('data-bs-toggle', 'modal');
             deleteButton.setAttribute('data-bs-target', '#delConfirmPersonel');
             deleteButton.setAttribute('data-id', personnel.id);
+            deleteButton.setAttribute('data-firstname', personnel.firstName);
+            deleteButton.setAttribute('data-lastname', personnel.lastName);
             deleteButton.innerHTML = '<i class="fa-solid fa-trash fa-fw"></i>';
 
             // Add event listener to delete button
             deleteButton.addEventListener('click', function() {
-                const departmentId = this.getAttribute('data-id');
-                console.log(departmentId);
+                const personnelId = this.getAttribute('data-id');
+                const fullName = this.getAttribute('data-firstName') + " " + this.getAttribute('data-lastName');
+
+                var message = "Are you sure you want to delete <strong>" + fullName + "</strong>?";
+                console.log(message)
+  
+                $('#delConfirmPersonel .modal-body').html(message);
 
                 // Show the modal when the delete button is clicked
-                $('#deleteDepartmentModal').show();
+                $('#delConfirmPersonel').show();
 
                 // Handle click on the confirm button inside the modal
-                $('#delConfirmDepartmentBtn').click(function() {
+                $('#delConfirmPersonnelBtn').click(function() {
                     // AJAX call to delete the department
                     $.ajax({
-                        url: 'libs/php/deleteDepartmentByID.php', // Update this to the actual path of your PHP file
+                        url: 'libs/php/deletePersonelByID.php', // Update this to the actual path of your PHP file
                         type: 'POST',
-                        data: { id: departmentId },
+                        data: { id: personnelId },
                         success: function(response) {
-                            // The response is already an object, so no need to parse it
-                            if (response.status.code === "200") {
-                                alert("Department deleted successfully.");
-                                // Optionally, you can remove the button or the department row from the UI
-                                populateDepartments();
+                            
+                            if (response.status.code === "200") {                              
+                                populatePersonnel();
                                 $('#deleteDepartmentModal').modal('hide');
                             } else {
                                 alert("Failed to delete the department: " + response.status.description);
@@ -220,43 +224,50 @@ function populateDepartments(query = '') {
                       deleteButton.setAttribute('data-bs-toggle', 'modal');
                       deleteButton.setAttribute('data-bs-target', '#delConfirmDepartment');
                       deleteButton.setAttribute('data-id', department.id);
+                      deleteButton.setAttribute('data-department-name', department.departmentName);
                       deleteButton.innerHTML = '<i class="fa-solid fa-trash fa-fw"></i>';
 
                       // Add event listener to delete button
                       deleteButton.addEventListener('click', function() {
-                          const departmentId = this.getAttribute('data-id');
-                          console.log(departmentId);
+                        const departmentId = this.getAttribute('data-id');
+                        const departmentName = this.getAttribute('data-department-name');
+                        var message = "Are you sure you want to delete <strong>" + departmentName + "</strong>?";
+                        console.log(message)
+                        
+                        // Update the modal body text with the department name
+                        $('#delConfirmDepartment .modal-body').html(message);
 
-                          // Show the modal when the delete button is clicked
-                          $('#deleteDepartmentModal').show();
-
-                          // Handle click on the confirm button inside the modal
-                          $('#delConfirmDepartmentBtn').click(function() {
-                              // AJAX call to delete the department
-                              $.ajax({
-                                  url: 'libs/php/deleteDepartmentByID.php', // Update this to the actual path of your PHP file
-                                  type: 'POST',
-                                  data: { id: departmentId },
-                                  success: function(response) {
-                                      // The response is already an object, so no need to parse it
-                                      if (response.status.code === "200") {
-                                          alert("Department deleted successfully.");
-                                          // Optionally, you can remove the button or the department row from the UI
-                                          populateDepartments();
-                                          $('#deleteDepartmentModal').modal('hide');
-                                      } else {
-                                          alert("Failed to delete the department: " + response.status.description);
-                                      }
-                                  },
-                                  error: function(xhr, status, error) {
-                                      alert("An error occurred: " + status + " " + error);
-                                  }
-                              });
-
-                              // Hide the modal after the operation is complete
-                              $('#deleteDepartmentModal').hide();
-                          });
-                      });
+                        // Show the modal when the delete button is clicked
+                        $('#delConfirmDepartment').modal('show');
+                      
+                        // Handle click on the confirm button inside the modal
+                        $('#delConfirmDepartmentBtn').off('click').on('click', function() {
+                            // AJAX call to delete the department
+                            $.ajax({
+                                url: 'libs/php/deleteDepartmentByID.php', // Update this to the actual path of your PHP file
+                                type: 'POST',
+                                data: { id: departmentId },
+                                success: function(response) {
+                                    if (response.status.code === "200") {
+                                        populateDepartments();
+                                        $('#deleteDepartmentModal').modal('hide');
+                                    } else if (response.status.code === "400") {
+                                        // Check for status 400 and update the modal content
+                                        var departmentName = response.data.departmentName;
+                                        var count = response.data.count;
+                                        var message = "You cannot delete the entry of <strong>" + departmentName + "</strong>. There are <strong>" + count + "</strong> employees in that department.";
+                                        $('#delBlockedDepartment .modal-body').html(message);
+                                        $('#delBlockedDepartment').modal('show');
+                                    } else {
+                                        alert("Failed to delete the department: " + response.status.description);
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    alert("An error occurred: " + status + " " + error);
+                                }
+                            });
+                        });
+                    });
 
                       actionCell.appendChild(editButton);
                       actionCell.appendChild(deleteButton);
@@ -313,15 +324,20 @@ function populateLocations(query = '') {
             deleteButton.setAttribute('data-bs-toggle', 'modal');
             deleteButton.setAttribute('data-bs-target', '#delConfirmLocation');
             deleteButton.setAttribute('data-id', location.id);
+            deleteButton.setAttribute('data-location-name', location.name);
             deleteButton.innerHTML = '<i class="fa-solid fa-trash fa-fw"></i>';
 
             // Add event listener to delete button
             deleteButton.addEventListener('click', function() {
               const locationId = this.getAttribute('data-id');
-              console.log(locationId);
+              const locationName = this.getAttribute('data-location-name');
+              var message = "Are you sure you want to delete <strong>" + locationName + "</strong>?";
+              console.log(message)
+
+              $('#delConfirmLocation .modal-body').html(message);
               
               // Show the modal when the delete button is clicked
-              $('#deleteLocationModal').show();
+              $('#delConfirmLocation').show();
               
               // Handle click on the confirm button inside the modal
               $('#delConfirmLocationBtn').click(function() {
@@ -333,14 +349,19 @@ function populateLocations(query = '') {
                   success: function(response) {
                     // The response is already an object, so no need to parse it
                     if (response.status.code === "200") {
-                      alert("Location deleted successfully.");
-                      // Optionally, you can remove the button or the location row from the UI
-                      populateLocations(); // Re-populate the table
-                      $('#deleteLocationModal').hide();
-                    } else {
+                      populateLocations();
+                      $('#deleteLocationModal').modal('hide');
+                  } else if (response.status.code === "400") {                      
+                      // Check for status 400 and update the modal content
+                      var name = response.data.name;
+                      var count = response.data.count;
+                      var message = "You cannot delete the entry of " + locationName + ". There are " + count + " departments in that location.";
+                      $('#delBlockedLocation .modal-body').html(message);
+                      $('#delBlockedLocation').modal('show');
+                  } else {
                       alert("Failed to delete the location: " + response.status.description);
-                    }
-                  },
+                  }
+              },
                   error: function(xhr, status, error) {
                     alert("An error occurred: " + status + " " + error);
                   }
@@ -422,7 +443,12 @@ $(document).ready(function() {
         // Get the values from the form fields
         const departmentName = $("#editDepartmentDropdown").val();
         const locationID = $("#editDepartmentLocation").val();
-        const departmentId = $("#editDepartmentID").val(); // Retrieve the department ID from the hidden input
+        const departmentId = $("#editDepartmentID").val();
+
+        if (departmentName.trim() === '' || locationID.trim() === '') {
+          alert('Please fill out all fields.');
+          return;
+        }
 
         var locationIDToCity = {
           "1": "London",
@@ -433,8 +459,6 @@ $(document).ready(function() {
       };
       // Use the reverse mapping object to get city name based on location ID
       var cityNumber = locationIDToCity[locationID] || "Unknown";
-      console.log(cityNumber)
-      console.log(departmentId)
         
         // AJAX request to update department
         $.ajax({
@@ -447,7 +471,6 @@ $(document).ready(function() {
             },
             dataType: 'json',
             success: function(response) {
-                console.log(response);
                 if (response.status.code === "200") {
                     alert('Department updated successfully!');
                     $('#editDepartmentModal').modal('hide'); // Hide the modal after successful update
@@ -472,9 +495,10 @@ $(document).ready(function() {
       const locationName = $("#editLocationName").val();
       const locationId = $("#editLocationID").val(); // Retrieve the location ID from the hidden input
 
-      // Log the values to the console for debugging
-      console.log('Location ID:', locationId);
-      console.log('Location Name:', locationName);
+      if (locationName.trim() === '') {
+        alert('Please fill out the field.');
+        return;
+      }
 
       // AJAX request to update location
       $.ajax({
@@ -486,7 +510,6 @@ $(document).ready(function() {
           },
           dataType: 'json',
           success: function(response) {
-              console.log(response);
               if (response.status.code === "200") {
                   alert('Location updated successfully!');
                   $('#editLocationModal').modal('hide');
@@ -503,88 +526,92 @@ $(document).ready(function() {
   });
 });
 
+
 $(document).ready(function() {
   $("#editPersonnelConfirm").click(function(event) {
-      event.preventDefault(); // Prevent default button behavior
+    // Prevent the form from submitting by default
+    event.preventDefault();
 
-      // Get the values from the form fields
-      const firstName = $("#editPersonnelFirstName").val();
-      const lastName = $("#editPersonnelLastName").val();
-      const departmentName = $("#editPersonnelDepartment").val();
-      const email = $("#editPersonnelEmailAddress").val();
-      const personnelId = $("#editPersonnelEmployeeID").val(); // Retrieve the personnel ID from the hidden input
+    // Get the values from the form fields
+    const firstName = $("#editPersonnelFirstName").val();
+    const lastName = $("#editPersonnelLastName").val();
+    const departmentName = $("#editPersonnelDepartment").val();
+    const email = $("#editPersonnelEmailAddress").val();
+    const personnelId = $("#editPersonnelEmployeeID").val();
 
-      // Create a mapping object from department names to IDs
-      var nameToDepartmentID = {
-          "Human Resources": "1",
-          "Sales": "2",
-          "Marketing": "3",
-          "Legal": "4",
-          "Services": "5",
-          "Research and Development": "6",
-          "Product Management": "7",
-          "Training": "8",
-          "Support": "9",
-          "Engineering": "10",
-          "Accounting": "11",
-          "Business Development": "12"
-      };
-      
-      // Map department name to department ID
-      var departmentID = nameToDepartmentID[departmentName] || "Unknown";
+    // Validate all fields are not empty
+    if (firstName.trim() === '' || lastName.trim() === '' || departmentName.trim() === '' || email.trim() === '') {
+      alert('Please fill out all fields.');
+      return;
+    }
 
-      // Log the values to the console for debugging
-      console.log('Personnel ID:', personnelId);
-      console.log('First Name:', firstName);
-      console.log('Last Name:', lastName);
-      console.log('Department ID:', departmentID);
-      console.log('Email:', email);
+    // Validate email format using a regular expression
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert('Please enter a valid email address. Example: name@hotmail.com');
+      return;
+    }
 
-      // AJAX request to update personnel
-      $.ajax({
-          url: 'libs/php/editPersonelByID.php',
-          type: 'POST',
-          data: {
-              id: personnelId,
-              firstName: firstName,
-              lastName: lastName,
-              departmentID: departmentID,
-              email: email
-          },
-          dataType: 'json',
-          success: function(response) {
-              console.log(response);
-              if (response.status.code === "200") {
-                  alert('Personnel updated successfully!');
-                  $('#editPersonnelModal').modal('hide'); // Hide the modal after successful update
-                  populatePersonnel(); // Re-populate the table to reflect changes
-              } else {
-                  alert('Error: ' + response.status.description);
-              }
-          },
-          error: function(xhr, status, error) {
-              console.error(xhr);
-              alert('An error occurred: ' + status + ' ' + error);
-          }
-      });
+    // Create a mapping object from department names to IDs
+    var nameToDepartmentID = {
+      "Human Resources": "1",
+      "Sales": "2",
+      "Marketing": "3",
+      "Legal": "4",
+      "Services": "5",
+      "Research and Development": "6",
+      "Product Management": "7",
+      "Training": "8",
+      "Support": "9",
+      "Engineering": "10",
+      "Accounting": "11",
+      "Business Development": "12"
+    };
+
+    // Map department name to department ID
+    var departmentID = nameToDepartmentID[departmentName] || "Unknown";
+    
+    // AJAX request to update personnel
+    $.ajax({
+      url: 'libs/php/editPersonelByID.php',
+      type: 'POST',
+      data: {
+        id: personnelId,
+        firstName: firstName,
+        lastName: lastName,
+        departmentID: departmentID,
+        email: email
+      },
+      dataType: 'json',
+      success: function(response) {
+        if (response.status.code === "200") {
+          alert('Personnel updated successfully!');
+          $('#editPersonnelModal').modal('hide'); // Hide the modal after successful update
+          populatePersonnel(); // Re-populate the table to reflect changes
+        } else {
+          alert('Error: ' + response.status.description);
+        }
+      },
+      error: function(xhr, status, error) {
+        console.error(xhr);
+        alert('An error occurred: ' + status + ' ' + error);
+      }
+    });
   });
 });
+
   
   function applyFilters() {
     // Get the selected values from dropdowns
     var departmentValue = document.getElementById("filterModalDepartment").value;
     var locationValue = document.getElementById("filterModalLocation").value;
-    console.log(departmentValue)
-    console.log(locationValue)
     
-    if(departmentValue === ""){
-      console.log("location only")
+    
+    if(departmentValue === ""){      
       populatePersonnel(locationValue);
-    } else if (locationValue=== ""){
-      console.log("depart only")
+    } else if (locationValue=== ""){      
       populatePersonnel(departmentValue);
-    } else {
-      console.log("both")
+    } else {      
       populatePersonnel(locationValue);
       populatePersonnel(departmentValue);
     }
@@ -606,7 +633,7 @@ $(document).ready(function() {
       targetModal = "#insertPersonnelModal";
     } else if ($("#departmentsBtn").hasClass("active")) {
       targetModal = "#insertDepartmentModal";
-    } else if ($("#locationsBtn").hasClass("active")) {
+    } else if($("#locationsBtn").hasClass("active")) {
       targetModal = "#insertLocationModal";
     }
     
@@ -618,59 +645,75 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {
-  $("#insertPersonnelBtn").click(function() {
-      var firstName = $("#insertPersonnelFirstName").val();
-      var lastName = $("#insertPersonnelLastName").val();
-      var departmentName = $("#insertPersonnelDepartment").val();
-      var email = $("#insertPersonnelEmailAddress").val();
-    
-     var departmentID;
-    
-     // Create a reverse mapping object
-      var nameToDepartmentID = {
-        "Human Resources": "1",
-        "Sales": "2",
-        "Marketing": "3",
-        "Legal": "4",
-        "Services": "5",
-        "Research and Development": "6",
-        "Product Management": "7",
-        "Training": "8",
-        "Support": "9",
-        "Engineering": "10",
-        "Accounting": "11",
-        "Business Development": "12"
-      };
-      
-      departmentID = nameToDepartmentID[departmentName] || "Unknown";
+  $("#insertPersonnelBtn").click(function(event) {
+    event.preventDefault(); // Prevent default form submission
 
+    // Get the values from the form fields
+    var firstName = $("#insertPersonnelFirstName").val();
+    var lastName = $("#insertPersonnelLastName").val();
+    var departmentName = $("#insertPersonnelDepartment").val();
+    var email = $("#insertPersonnelEmailAddress").val();
 
-      // Perform AJAX request
-      $.ajax({
-          url: 'libs/php/insertPersonel.php',
-          type: 'POST', // Use POST since you are sending data
-          data: {
-            firstName: firstName,
-            lastName: lastName,
-            departmentID: departmentID,
-            email: email
-          },
-          dataType: 'json',
-          success: function(response) {
-              console.log(response);
-              if (response.status.code === "200") {
-                  alert('Personnel added successfully!');
-                  // Optionally, you can perform actions after successful insertion
-                  populatePersonnel();
-              } else {
-                  alert('Error: ' + response.status.description);
-              }
-          },
-          error: function(xhr, status, error) {
-              console.error(xhr);
-              alert('An error occurred: ' + status + ' ' + error);
-          }
-      });
+    // Validate all fields are not empty
+    if (firstName.trim() === '' || lastName.trim() === '' || departmentName.trim() === '' || email.trim() === '') {
+      alert('Please fill out all fields.');
+      return;
+    }
+
+    // Validate email format using a regular expression
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert('Please enter a valid email address. Example: name@hotmail.com');
+      return;
+    }
+
+    // Create a mapping object from department names to IDs
+    var nameToDepartmentID = {
+      "Human Resources": "1",
+      "Sales": "2",
+      "Marketing": "3",
+      "Legal": "4",
+      "Services": "5",
+      "Research and Development": "6",
+      "Product Management": "7",
+      "Training": "8",
+      "Support": "9",
+      "Engineering": "10",
+      "Accounting": "11",
+      "Business Development": "12"
+    };
+
+    // Map department name to department ID
+    var departmentID = nameToDepartmentID[departmentName] || "Unknown";
+
+    // Log the values to the console for debugging
+    
+
+    // AJAX request to insert personnel
+    $.ajax({
+      url: 'libs/php/insertPersonel.php',
+      type: 'POST',
+      data: {
+        firstName: firstName,
+        lastName: lastName,
+        departmentID: departmentID,
+        email: email
+      },
+      dataType: 'json',
+      success: function(response) {        
+        if (response.status.code === "200") {
+          alert('Personnel added successfully!');
+          // Optionally, you can perform actions after successful insertion
+          populatePersonnel(); // Re-populate the table to reflect changes
+        } else {
+          alert('Error: ' + response.status.description);
+        }
+      },
+      error: function(xhr, status, error) {
+        console.error(xhr);
+        alert('An error occurred: ' + status + ' ' + error);
+      }
+    });
   });
 });
 
@@ -678,6 +721,11 @@ $(document).ready(function() {
   $("#insertDepartmentBtn").click(function() {
     var departmentName = $("#insertDepartmentName").val();
     var cityName = $("#insertDepartmentLocation").val(); // Assuming cityName is the user-selected city name
+
+    if (departmentName.trim() === '' || cityName.trim() === '') {
+      alert('Please fill out all fields.');
+      return;
+    }
     
     var locationID;
     
@@ -691,9 +739,7 @@ $(document).ready(function() {
     };
     
     // Use the reverse mapping object to get locationID based on cityName
-    locationID = cityToLocationID[cityName] || "Unknown";
-      console.log(departmentName);
-      console.log(locationID);
+    locationID = cityToLocationID[cityName] || "Unknown";      
 
       // Perform AJAX request
       $.ajax({
@@ -704,8 +750,7 @@ $(document).ready(function() {
               locationID: locationID
           },
           dataType: 'json',
-          success: function(response) {
-              console.log(response);
+          success: function(response) {              
               if (response.status.code === "200") {
                   alert('Department added successfully!');
                   // Optionally, you can perform actions after successful insertion
@@ -724,9 +769,12 @@ $(document).ready(function() {
 
 $(document).ready(function() {
   $("#insertLocationBtn").click(function() {
-      var locationName = $("#insertLocationName").val();    
+      var locationName = $("#insertLocationName").val();
 
-      console.log(locationName);
+      if (locationName.trim() === '') {
+        alert('Please fill out the field.');
+        return;
+      }      
 
       // Perform AJAX request
       $.ajax({
@@ -736,8 +784,7 @@ $(document).ready(function() {
               name: locationName,
           },
           dataType: 'json',
-          success: function(response) {
-              console.log(response);
+          success: function(response) {              
               if (response.status.code === "200") {
                   alert('Location added successfully!');
                   // Optionally, you can perform actions after successful insertion
@@ -853,13 +900,13 @@ $(document).ready(function() {
 
                     // Populate dropdown options
                     data.data.forEach(item => {
-                        if (item.departmentName !== "Not used") {
-                            const option = document.createElement("option");
-                            option.value = item.departmentName;
-                            option.textContent = item.departmentName;
-                            editPersonnelDepartmentDropdown.appendChild(option);
-                        }
-                    });
+                      if (item.departmentName !== "Not used") {
+                          const option = document.createElement("option");
+                          option.value = item.departmentName;
+                          option.textContent = item.departmentName;
+                          editPersonnelDepartmentDropdown.appendChild(option);
+                      }
+                  });
 
                 } else {
                     // Handle error for filterModalDepartment dropdown
