@@ -49,19 +49,29 @@
 	$checkResult = $checkQuery->get_result();
 	$checkRow = $checkResult->fetch_assoc();
 
-if ($checkRow['count'] > 0) {
-    // There are departments associated with this location, do not delete
-    $output['status']['code'] = "400";
-    $output['status']['name'] = "executed";
-    $output['status']['description'] = "Cannot delete location. There are departments associated with this location.";
-    $output['data'] = [];
-
-    mysqli_close($conn);
-
-    echo json_encode($output);
-
-    exit;
-}
+	if ($checkRow['count'] > 0) {
+		// Get the location name for the response
+		$locationQuery = $conn->prepare('SELECT name FROM location WHERE id = ?');
+		$locationQuery->bind_param("i", $_REQUEST['id']);
+		$locationQuery->execute();
+		$locationResult = $locationQuery->get_result();
+		$locationRow = $locationResult->fetch_assoc();
+	
+		// There are departments associated with this location, do not delete
+		$output['status']['code'] = "400";
+		$output['status']['name'] = "executed";
+		$output['status']['description'] = "Cannot delete location. There are departments associated with this location.";
+		$output['data'] = [
+			'name' => $locationRow['name'],
+			'count' => $checkRow['count']
+		];
+	
+		mysqli_close($conn);
+	
+		echo json_encode($output);
+	
+		exit;
+	}
 
 
 	// SQL statement accepts parameters and so is prepared to avoid SQL injection.

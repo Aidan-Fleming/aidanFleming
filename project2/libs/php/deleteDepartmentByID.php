@@ -47,17 +47,28 @@ header('Content-Type: application/json; charset=UTF-8');
     $checkRow = $checkResult->fetch_assoc();
 
     if ($checkRow['count'] > 0) {
-        $output['status']['code'] = "400";
-        $output['status']['name'] = "executed";
-        $output['status']['description'] = "Cannot delete department. There are personnel associated with this department.";
-        $output['data'] = [];
-
-        mysqli_close($conn);
-
-        echo json_encode($output);
-
-        exit;
-}
+		// Get the department name for the response
+		$departmentQuery = $conn->prepare('SELECT name FROM department WHERE id = ?');
+		$departmentQuery->bind_param("i", $_REQUEST['id']);
+		$departmentQuery->execute();
+		$departmentResult = $departmentQuery->get_result();
+		$departmentRow = $departmentResult->fetch_assoc();
+	
+		// There are personnel associated with this department, do not delete
+		$output['status']['code'] = "400";
+		$output['status']['name'] = "executed";
+		$output['status']['description'] = "Cannot delete department. There are personnel associated with this department.";
+		$output['data'] = [
+			'departmentName' => $departmentRow['name'],
+			'count' => $checkRow['count']
+		];
+	
+		mysqli_close($conn);
+	
+		echo json_encode($output);
+	
+		exit;
+	}
 
 	// SQL statement accepts parameters and so is prepared to avoid SQL injection.
 	// $_REQUEST used for development / debugging. Remember to change to $_POST for production
