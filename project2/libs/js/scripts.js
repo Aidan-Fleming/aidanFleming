@@ -451,12 +451,12 @@ $(document).ready(function() {
         }
 
         var locationIDToCity = {
-          "1": "London",
-          "2": "New York",
-          "3": "Paris",
-          "4": "Munich",
-          "5": "Rome"
-      };
+          "London": "1",
+          "New York": "2",
+          "Paris": "3",
+          "Munich": "4",
+          "Rome": "5"
+          };
       // Use the reverse mapping object to get city name based on location ID
       var cityNumber = locationIDToCity[locationID] || "Unknown";
         
@@ -474,7 +474,7 @@ $(document).ready(function() {
                 if (response.status.code === "200") {
                     alert('Department updated successfully!');
                     $('#editDepartmentModal').modal('hide'); // Hide the modal after successful update
-                    // Optionally, you can perform additional actions here
+                    populateDepartments();
                 } else {
                     alert('Error: ' + response.status.description);
                 }
