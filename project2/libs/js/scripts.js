@@ -78,7 +78,6 @@ function populatePersonnel(query = '') {
                 const fullName = this.getAttribute('data-firstName') + " " + this.getAttribute('data-lastName');
 
                 var message = "Are you sure you want to delete <strong>" + fullName + "</strong>?";
-                console.log(message)
   
                 $('#delConfirmPersonel .modal-body').html(message);
 
@@ -232,7 +231,6 @@ function populateDepartments(query = '') {
                         const departmentId = this.getAttribute('data-id');
                         const departmentName = this.getAttribute('data-department-name');
                         var message = "Are you sure you want to delete <strong>" + departmentName + "</strong>?";
-                        console.log(message)
                         
                         // Update the modal body text with the department name
                         $('#delConfirmDepartment .modal-body').html(message);
@@ -332,7 +330,6 @@ function populateLocations(query = '') {
               const locationId = this.getAttribute('data-id');
               const locationName = this.getAttribute('data-location-name');
               var message = "Are you sure you want to delete <strong>" + locationName + "</strong>?";
-              console.log(message)
 
               $('#delConfirmLocation .modal-body').html(message);
               
@@ -350,12 +347,13 @@ function populateLocations(query = '') {
                     // The response is already an object, so no need to parse it
                     if (response.status.code === "200") {
                       populateLocations();
-                      $('#deleteLocationModal').modal('hide');
-                  } else if (response.status.code === "400") {                      
+                      $('#delConfirmLocation').modal('hide');
+                  } else if (response.status.code === "400") {       
+                    $('#delConfirmLocation').modal('hide');               
                       // Check for status 400 and update the modal content
                       var name = response.data.name;
                       var count = response.data.count;
-                      var message = "You cannot delete the entry of " + locationName + ". There are " + count + " departments in that location.";
+                      var message = "You cannot delete the entry of <strong>" + locationName + "</strong>. There are <strong>" + count + "</strong> departments in that location.";
                       $('#delBlockedLocation .modal-body').html(message);
                       $('#delBlockedLocation').modal('show');
                   } else {
@@ -443,9 +441,11 @@ $(document).ready(function() {
         // Get the values from the form fields
         const departmentName = $("#editDepartmentDropdown").val();
         const locationID = $("#editDepartmentLocation").val();
-        const departmentId = $("#editDepartmentID").val();
+        const departmentId = $("#editDepartmentID").val();        
 
-        if (departmentName.trim() === '' || locationID.trim() === '') {
+        if (
+          !departmentName || departmentName.trim() === '' || 
+          !locationID || locationID.trim() === '') {
           alert('Please fill out all fields.');
           return;
         }
@@ -495,7 +495,8 @@ $(document).ready(function() {
       const locationName = $("#editLocationName").val();
       const locationId = $("#editLocationID").val(); // Retrieve the location ID from the hidden input
 
-      if (locationName.trim() === '') {
+      if (
+        !locationName || locationName.trim() === '') {
         alert('Please fill out the field.');
         return;
       }
@@ -540,10 +541,13 @@ $(document).ready(function() {
     const personnelId = $("#editPersonnelEmployeeID").val();
 
     // Validate all fields are not empty
-    if (firstName.trim() === '' || lastName.trim() === '' || departmentName.trim() === '' || email.trim() === '') {
-      alert('Please fill out all fields.');
-      return;
-    }
+    if (!firstName || firstName.trim() === '' || 
+          !lastName || lastName.trim() === '' || 
+          !departmentName || departmentName.trim() === '' || 
+          !email || email.trim() === '') {
+          alert('Please fill out all fields.');
+          return;
+      }
 
     // Validate email format using a regular expression
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
