@@ -12,15 +12,13 @@
 	$executionStartTime = microtime(true);
 
 	// connection details for MySQL database
-
 	$cd_host = "db5016070809.hosting-data.io";
 	$cd_port = 3306;
 	$cd_socket = "";
 
 	// database name, username and password
-
 	$cd_dbname = "dbs13090698";
-	$cd_user = 'dbu5591712';
+	$cd_username = "dbu5591712";
 	$cd_password = 'Brown2025!';
 
 	header('Content-Type: application/json; charset=UTF-8');
@@ -41,39 +39,7 @@
 
 		exit;
 
-	}	
-
-	$checkQuery = $conn->prepare('SELECT COUNT(*) AS count FROM department WHERE locationID = ?');
-	$checkQuery->bind_param("i", $_REQUEST['id']);
-	$checkQuery->execute();
-	$checkResult = $checkQuery->get_result();
-	$checkRow = $checkResult->fetch_assoc();
-
-	if ($checkRow['count'] > 0) {
-		// Get the location name for the response
-		$locationQuery = $conn->prepare('SELECT name FROM location WHERE id = ?');
-		$locationQuery->bind_param("i", $_REQUEST['id']);
-		$locationQuery->execute();
-		$locationResult = $locationQuery->get_result();
-		$locationRow = $locationResult->fetch_assoc();
-	
-		// There are departments associated with this location, do not delete
-		$output['status']['code'] = "400";
-		$output['status']['name'] = "executed";
-		$output['status']['description'] = "Cannot delete location. There are departments associated with this location.";
-		$output['data'] = [
-			'name' => $locationRow['name'],
-			'count' => $checkRow['count']
-		];
-	
-		mysqli_close($conn);
-	
-		echo json_encode($output);
-	
-		exit;
 	}
-
-
 	// SQL statement accepts parameters and so is prepared to avoid SQL injection.
 	// $_REQUEST used for development / debugging. Remember to change to $_POST for production
 

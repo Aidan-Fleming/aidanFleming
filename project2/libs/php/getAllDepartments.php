@@ -10,19 +10,17 @@
 
     $executionStartTime = microtime(true); 
 
-   // connection details for MySQL database
-
+    // connection details for MySQL database
 	$cd_host = "db5016070809.hosting-data.io";
 	$cd_port = 3306;
 	$cd_socket = "";
 
 	// database name, username and password
-
 	$cd_dbname = "dbs13090698";
-	$cd_user = "dbu5591712";
+	$cd_username = "dbu5591712";
 	$cd_password = 'Brown2025!';
 
-    header('Content-Type: application/json; charset=UTF-8');
+    //header('Content-Type: application/json; charset=UTF-8');
 
     $conn = new mysqli($cd_host, $cd_user, $cd_password, $cd_dbname, $cd_port, $cd_socket);
 
@@ -44,7 +42,7 @@
     $query = 'SELECT department.id, department.name AS departmentName, location.name AS locationName 
     FROM `department` 
     LEFT JOIN location ON department.locationID = location.id
-    ORDER BY locationName ASC';
+    ORDER BY departmentName ASC';
 
     $result = $conn->query($query);
 

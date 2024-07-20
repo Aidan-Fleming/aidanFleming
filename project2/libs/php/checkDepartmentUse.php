@@ -1,10 +1,10 @@
 <?php
 
-// example use from browser
-// use insertDepartment.php first to create new dummy record and then specify its id in the command below
+// Example use from browser
+// Use insertDepartment.php first to create a new dummy record and then specify its id in the command below
 // http://localhost/companydirectory/libs/php/deleteDepartmentByID.php?id=<id>
 
-// remove next two lines for production
+// Remove the next two lines for production
 ini_set('display_errors', 'On');
 error_reporting(E_ALL);
 
@@ -38,31 +38,42 @@ if (mysqli_connect_errno()) {
     exit;
 }
 
-$query = $conn->prepare('DELETE FROM personnel WHERE id = ?');
-$query->bind_param("i", $_REQUEST['id']);
+// Prepare and execute a single query to check personnel count and retrieve department name
+$query = $conn->prepare('
+    SELECT 
+        d.name AS departmentName,
+        COUNT(p.id) AS personnelCount
+    FROM 
+        department d
+    LEFT JOIN 
+        personnel p ON (p.departmentID = d.id)
+    WHERE 
+        d.id = ?
+    GROUP BY 
+        d.id
+');
+
+$query->bind_param("i", $_POST['id']);
 $query->execute();
+$result = $query->get_result();
+$row = $result->fetch_assoc();
 
-if ($query->affected_rows === 0) {
-    $output['status']['code'] = "400";
-    $output['status']['name'] = "executed";
-    $output['status']['description'] = "query failed";    
+if ($row) {
+    $output['status']['code'] = "200";
+    $output['status']['name'] = "ok";
+    $output['status']['description'] = "success";
+    $output['data'] = [$row];
+} else {
+    $output['status']['code'] = "404";
+    $output['status']['name'] = "not found";
+    $output['status']['description'] = "location not found";
     $output['data'] = [];
-
-    mysqli_close($conn);
-
-    echo json_encode($output); 
-
-    exit;
 }
 
-$output['status']['code'] = "200";
-$output['status']['name'] = "ok";
-$output['status']['description'] = "success";
 $output['status']['returnedIn'] = (microtime(true) - $executionStartTime) / 1000 . " ms";
-$output['data'] = [];
 
 mysqli_close($conn);
 
-echo json_encode($output); 
+echo json_encode($output);
 
 ?>
