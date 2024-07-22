@@ -264,6 +264,8 @@ $("#searchInp").on("keyup", function () {
 $("#refreshBtn").click(function () {
     // Clear the search input field
     $("#searchInp").val('');
+    $("#filterPersonnelByDepartment").val('Any');
+    $("#filterPersonnelByLocation").val('Any');
   
     if ($("#personnelBtn").hasClass("active")) {
       populatePersonnel();
@@ -288,8 +290,6 @@ $("#editPersonnelModal").on("show.bs.modal", function (e) {
         var resultCode = result.status.code;
   
         if (resultCode == 200) {
-          console.log(result.data.personnel)
-          console.log(result.data.department)
           // Update the hidden input with the employee id so that
           // it can be referenced when the form is submitted
   
@@ -335,13 +335,6 @@ $("#editPersonnelModal").on("submit", function (e) {
       const jobTitle = $("#editPersonnelJobTitle").val();
       const departmentID = $("#editPersonnelDepartment").val();
       const email = $("#editPersonnelEmailAddress").val();
-        
-      console.log(id)
-      console.log(firstName)
-      console.log(lastName)
-      console.log(jobTitle)
-      console.log(departmentID)
-      console.log(email)
 
       e.preventDefault();
       
@@ -423,11 +416,7 @@ $("#editDepartmentModal").on("submit", function(e)  {
 
         const departmentName = $("#editDepartmentName").val();
         const location = $("#editDepartmentLocation").val();
-        const departmentId = $("#editDepartmentID").val();
-        
-        console.log("d name" + departmentName)
-        console.log("l name" +location)
-        console.log("id" +departmentId)
+        const departmentId = $("#editDepartmentID").val();     
 
         e.preventDefault();
 
@@ -494,10 +483,6 @@ $("#editLocationModal").on("submit", function(e)  {
     const locationName =  $("#editLocationName").val();
     const locationId = $("#editLocationID").val();
 
-    console.log(locationName)
-    console.log(locationId)
-
-
     e.preventDefault();
     // AJAX request to update location
     $.ajax({
@@ -524,7 +509,11 @@ $("#editLocationModal").on("submit", function(e)  {
     });
 });
 
+var currentfilterDepartmentSelect
+var currentfilterLocationSelect
+
 $("#filterModal").on("show.bs.modal", function () {
+  
   $.ajax({
     url:
       "libs/php/getAllDepartments.php",
@@ -533,7 +522,9 @@ $("#filterModal").on("show.bs.modal", function () {
     success: function (result) {
       var resultCode = result.status.code;
 
-      if (resultCode == 200) {        
+      if (resultCode == 200) {      
+        
+        var currentfilterDepartmentSelect = $('#filterPersonnelByDepartment').val(); 
 
         // Update the hidden input with the employee id so that
         // it can be referenced when the form is submitted
@@ -554,7 +545,10 @@ $("#filterModal").on("show.bs.modal", function () {
               text: this.departmentName
             })
           );
-        });           
+        });
+        
+        $('#filterPersonnelByDepartment').val(currentfilterDepartmentSelect); 
+
         
       } else {
         $("#filterModal .modal-title").replaceWith(
@@ -578,6 +572,8 @@ $("#filterModal").on("show.bs.modal", function () {
 
       if (resultCode == 200) {
         
+        var currentfilterLocationSelect = $('#filterPersonnelByLocation').val();
+        
         // Update the hidden input with the employee id so that
         // it can be referenced when the form is submitted
         
@@ -597,7 +593,9 @@ $("#filterModal").on("show.bs.modal", function () {
               text: this.name
             })
           );
-        });  
+        });
+
+        $('#filterPersonnelByLocation').val(currentfilterLocationSelect);
         
       } else {
         $("#filterModal .modal-title").replaceWith(
@@ -610,7 +608,7 @@ $("#filterModal").on("show.bs.modal", function () {
         "Error retrieving data"
       );
     }
-  });
+  });  
 });
 
 var selectedDepartment;
@@ -618,19 +616,17 @@ var selectedLocation;
 
 $('#filterModal').on('hidden.bs.modal', function () {
   // Preserve the selected values when the modal is hidden
-  selectedDepartment = $('#filterPersonnelByDepartment').val();
-  selectedLocation = $('#filterPersonnelByLocation').val();
-  console.log('Filter modal hidden. Department:', selectedDepartment, 'Location:', selectedLocation);
+  
+  $('#filterDepartmentSelect').val(currentfilterDepartmentSelect); 
+  $('#filterLocation').val(currentfilterLocationSelect);
 });
 
 $('#filterPersonnelByDepartment').on('change', function() {
-  console.log($('#filterPersonnelByDepartment').val());
   $("#filterPersonnelByLocation").val('');
   applyDepFilters();  
 });
 
 $('#filterPersonnelByLocation').on('change', function() {
-  console.log($('#filterPersonnelByLocation').val());
   $("#filterPersonnelByDepartment").val('');  
   applyLocFilters();
 });
@@ -717,21 +713,16 @@ $(document).on('click', '.deleteDepartmentBtn', function() {
       id: id // Retrieves the data-id attribute from the calling button
     },
     success: function (result) {
-      console.log(id);
-      console.log(result.data);
       
       if (result.status.code == 200) {
-        console.log("200");
 
         if (result.data[0].personnelCount == 0) {
-          console.log("count = 0");
           $("#areYouSureDepartmentName").text(result.data[0].departmentName);
           $("#areYouSureDepartmentModal").data('id', id);
 
           // Ensure the jQuery object context is correct
           $("#areYouSureDepartmentModal").modal("show");
         } else {
-          console.log("else");
           $("#cantDeleteDeptName").text(result.data[0].departmentName);
           $("#personnelCount").text(result.data[0].personnelCount);
 
@@ -739,7 +730,6 @@ $(document).on('click', '.deleteDepartmentBtn', function() {
           $("#cantDeleteDepartmentModal").modal("show");
         }
       } else {
-        console.log(" doesn't equal 200");
         $("#cantDeleteDepartmentModal .modal-title").replaceWith("Error retrieving data");
       }
     },
@@ -753,7 +743,6 @@ $(document).on("submit", "#areYouSureDepartmentModal", function(e) {
   event.preventDefault(); // Prevent the default form submission
 
   var id = $(this).data('id');  
-  console.log(id)
 
   $.ajax({
     url: 'libs/php/deleteDepartmentByID.php', // Update this to the actual path of your PHP file
@@ -784,26 +773,20 @@ $(document).on('click', '.deleteLocationBtn', function() {
       id: id// Retrieves the data-id attribute from the calling button
     },
     success: function (result) {
-      console.log(id)
-      console.log(result.data)
       
       if (result.status.code == 200) {
-        console.log("200")
         if (result.data[0].departmentCount == 0) {
-          console.log("departmentCount == 0")
           $("#areYouSureLocationName").text(result.data[0].LocationName);
 
           $("#areYouSureLocationModal").data('id', id);
           $("#areYouSureLocationModal").modal("show");
         } else {
-          console.log("departmentCount == 1+")
           $("#cantDeleteLocName").text(result.data[0].LocationName);          
           $("#LocCount").text(result.data[0].departmentCount);
 
           $("#cantDeleteLocationModal").modal("show");
         }
       } else {
-        console.log("else")
         $("#cantDeleteLocationModal .modal-title").replaceWith("Error retrieving data");
       }
     },
@@ -819,7 +802,6 @@ $(document).on("submit", "#areYouSureLocationModal", function(e) {
   event.preventDefault(); // Prevent the default form submission
 
   var id = $(this).data('id');  
-  console.log(id)
 
   $.ajax({
     url: 'libs/php/deleteLocationByID.php', // Update this to the actual path of your PHP file
@@ -827,11 +809,9 @@ $(document).on("submit", "#areYouSureLocationModal", function(e) {
     data: { id: id }, // Retrieves the data-id attribute from the form input
     success: function(response) {
       if (response.status.code === "200") {
-        console.log("200")
         populateLocations(); // Refresh the personnel list
         $('#areYouSureLocatioModal').modal('hide'); // Hide the modal after successful deletion
       } else {
-        console.log("else")
         alert("Failed to delete the location: " + response.status.description);
       }
     },
@@ -909,12 +889,6 @@ $("#insertPersonnelModal").on("submit", function(e)  {
   var department = $("#insertPersonnelDepartment").val();
   var email = $("#insertPersonnelEmailAddress").val();
 
-  console.log(firstName)
-  console.log(lastName)
-  console.log(jobTitle)
-  console.log(department)
-  console.log(email)
-
   event.preventDefault(); // Prevent the default form submission
 
 
@@ -988,11 +962,8 @@ $("#insertDepartmentModal").on("show.bs.modal", function(e)  {
 $("#insertDepartmentModal").on("submit", function(e)  {
 
   var departmentName = $("#insertDepartmentName").val();
-  var LocationName = $("#insertDepartmentLocation").val();  
-
-  console.log(departmentName)
-  console.log(LocationName)
-
+  var LocationName = $("#insertDepartmentLocation").val();
+  
   event.preventDefault(); // Prevent the default form submission
 
 
@@ -1053,7 +1024,7 @@ $("#insertLocationModal").on("submit", function(e)  {
   
   
 $("#personnelBtn").click(function () {
-      $("#filterBtn").attr("disabled", false);
+      $("#filterBtn").attr("disabled", false);     
       
       // Call function to refresh peronsal table
       populatePersonnel();
