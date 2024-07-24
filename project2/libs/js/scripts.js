@@ -1,4 +1,4 @@
-function populatePersonnel(department = '', location = '') {
+function populatePersonnel(query = '', department = '', location = '') {
   fetch('libs/php/getAllPersonnels.php')
     .then(response => response.json())
     .then(data => {
@@ -12,7 +12,12 @@ function populatePersonnel(department = '', location = '') {
         data.data.forEach(personnel => {
           const matchesQuery = (
             (!department || personnel.departmentID == department) &&
-            (!location || personnel.locationID == location)
+            (!location || personnel.locationID == location) &&
+            (query === '' || 
+              `${personnel.firstName} ${personnel.lastName}`.toLowerCase().includes(query) ||
+              personnel.departmentName.toLowerCase().includes(query) ||
+              personnel.locationName.toLowerCase().includes(query) ||
+              personnel.email.toLowerCase().includes(query))
           );
 
           if (matchesQuery) {
@@ -102,6 +107,7 @@ function populatePersonnel(department = '', location = '') {
     })
     .catch(error => console.error('Error fetching personnel:', error));
 }
+
   
 function populateDepartments(query = '') {
   fetch('libs/php/getAllDepartments.php')
@@ -256,9 +262,7 @@ $("#searchInp").on("keyup", function () {
     const query = $(this).val().toLowerCase();
   
     // Call populatePersonnel with the current search query
-    populatePersonnel(query);
-    populateDepartments(query);
-    populateLocations(query);
+    populatePersonnel(query);    
 });
   
 $("#refreshBtn").click(function () {
@@ -280,7 +284,7 @@ $("#editPersonnelModal").on("show.bs.modal", function (e) {
   
     $.ajax({
       url:
-        "libs/php/GetPersonnelByID.php",
+        "libs/php/getPersonnelByID.php",
       type: "POST",
       dataType: "json",
       data: {
@@ -616,7 +620,6 @@ var selectedLocation;
 
 $('#filterModal').on('hidden.bs.modal', function () {
   // Preserve the selected values when the modal is hidden
-  
   $('#filterDepartmentSelect').val(currentfilterDepartmentSelect); 
   $('#filterLocation').val(currentfilterLocationSelect);
 });
@@ -634,14 +637,17 @@ $('#filterPersonnelByLocation').on('change', function() {
 function applyDepFilters() {
   const selectedDepartment = $('#filterPersonnelByDepartment').val();
   const selectedLocation = $('#filterPersonnelByLocation').val();
-  populatePersonnel(selectedDepartment, selectedLocation);
+  const query = $("#searchInp").val().toLowerCase(); // Get current search query
+  populatePersonnel(query, selectedDepartment, selectedLocation);
 }
 
 function applyLocFilters() {
   const selectedDepartment = $('#filterPersonnelByDepartment').val();
   const selectedLocation = $('#filterPersonnelByLocation').val();
-  populatePersonnel(selectedDepartment, selectedLocation);
+  const query = $("#searchInp").val().toLowerCase(); // Get current search query
+  populatePersonnel(query, selectedDepartment, selectedLocation);
 }
+
 
 $(document).on('click', '.deletePersonnelButton', function() {
   
