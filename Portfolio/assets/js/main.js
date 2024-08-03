@@ -252,6 +252,7 @@
 
 $(document).ready(function() {
   $('#contactForm').on('submit', function(event) {
+    console.log("submitted")
       event.preventDefault();
       
       $('.loading').show();
@@ -263,12 +264,17 @@ $(document).ready(function() {
           type: 'POST',
           data: $(this).serialize(),
           success: function(response) {
+            console.log("success")
+            console.log(response)
               $('.loading').hide();
               $('.sent-message').show();
               $('#contactForm')[0].reset();
-              $('.error-message').hide();
           },
           error: function(xhr, status, error) {
+            console.log("error")
+            console.log(xhr)
+            console.log(status)
+            console.log(error)
               $('.loading').hide();
               $('.error-message').text('An error occurred. Please try again.').show();
           }
