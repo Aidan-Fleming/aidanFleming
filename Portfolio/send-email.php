@@ -18,18 +18,18 @@ try {
     // Configure PHPMailer to use SMTP
     $mail->isSMTP();
     $mail->SMTPAuth = true;
-    $mail->Host       = 'smtp-mail.outlook.com';  
+    $mail->Host       = 'smtp.ionos.co.uk';  
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
     $mail->Port       = 587;
-    $mail->Username   = 'aidan_fleming@hotmail.com';  
-    $mail->Password   = 'flemingA1';    
-    $mail->SMTPDebug  = true;
-    $mail->AuthType = 'OAuth2';
+    $mail->Username   = 'aidan.fleming@aidanfleming.co.uk';  
+    $mail->Password   = 'AstonVilla2024!';    
+    $mail->SMTPDebug  = 2;
+
 
     // Set sender and recipient
-    $mail->setFrom('aidan_fleming@hotmail.com', $name);  // Fixed "From" address
+    $mail->setFrom('aidan.fleming@aidanfleming.co.uk', $name);  // Fixed "From" address
     $mail->addReplyTo($email, $name);  // User's email as "Reply-To"
-    $mail->addAddress('aidan_fleming@hotmail.com');  // Recipient
+    $mail->addAddress('aidan.fleming@aidanfleming.co.uk');  // Recipient
 
     // Set email subject and body
     $mail->Subject = $subject;

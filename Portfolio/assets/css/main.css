@@ -816,6 +816,7 @@ section,
   bottom: 20px;
 }
 
+
 /*--------------------------------------------------------------
 # Contact Section
 --------------------------------------------------------------*/
@@ -1310,6 +1311,10 @@ section,
 .btn-download:hover {
   background-color: #000000;
   color: white;
+}
+
+.blur {
+  filter: blur(3px);
 }
 
 
