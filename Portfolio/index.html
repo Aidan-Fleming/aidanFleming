@@ -28,6 +28,8 @@
 
   <!-- Main CSS File -->
   <link href="assets/css/main.css" rel="stylesheet">
+  <link rel="stylesheet" href="/node_modules/@fortawesome/fontawesome-free/css/all.min.css">
+
 
   <!-- =======================================================
   * Template Name: DevFolio
@@ -48,6 +50,8 @@
           <li><a href="#hero" class="active">Home<br></a></li>
           <li><a href="#about">About</a></li>
           <li><a href="#skills">Skills</a></li>
+          <li><a href="#education">Education</a></li>
+          <li><a href="#work-experience">Work Experience</a></li>
           <li><a href="#portfolio">Portfolio</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
@@ -97,7 +101,41 @@
     <section id="skills" class="skills section">
       <div class="container section-title" data-aos="fade-up">
         <h2>Skills</h2>
-      </div>    
+      </div>
+      
+      <div class="container icons-container" data-aos="fade-up">
+        <div class="skill-icon">
+            <i class="fab fa-html5" aria-hidden="true"></i>
+        </div>
+        <div class="skill-icon">
+            <i class="fab fa-css3-alt" aria-hidden="true"></i>
+        </div>
+        <div class="skill-icon">
+            <i class="fab fa-js-square" aria-hidden="true"></i>
+        </div>
+        <div class="skill-icon">
+            <i class="fab fa-react" aria-hidden="true"></i>
+        </div>       
+        <div class="skill-icon">
+            <i class="fab fa-php" aria-hidden="true"></i>
+        </div>
+        <div class="skill-icon">
+            <i class="fab fa-python" aria-hidden="true"></i>
+        </div>
+        <div class="skill-icon">
+            <i class="fab fa-node-js" aria-hidden="true"></i>
+        </div>
+        <div class="skill-icon">
+            <i class="fas fa-database" aria-hidden="true"></i>
+        </div>
+        <div class="skill-icon">
+            <i class="fab fa-git" aria-hidden="true"></i>
+        </div>
+        <div class="skill-icon">
+            <i class="fab fa-github" aria-hidden="true"></i>
+        </div>
+    </div>
+    
     
       <div class="container mt-6 skills-container" data-aos="fade-up">
         <div class="skill-category">
@@ -159,13 +197,40 @@
       </div>
     </section>
 
+    <section id="work-experience">      
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Work Experience</h2>
+        <p>Here are some examples of my previous work experience in an office environment. For more infomation, please see CV pdf above.</p>
+      </div>
+      <div class="timeline" data-aos="fade-up">
+        <div class="timeline-item">
+          <div class="timeline-date">2022 - 2024</div>
+          <div class="timeline-content">
+            <h3>Pension Administrator</h3>
+            <h4>XPS Group</h4>
+            <p>General Administration over 30 differnet pension schemes, able to handle transfers, retirements & manual claculations.</p>
+          </div>
+        </div>
+        <div class="timeline-item" data-aos="fade-up">
+          <div class="timeline-date">2019 - 2020</div>
+          <div class="timeline-content">
+            <h3>Junior Assistant Designer</h3>
+            <h4>Sunlight Futures</h4>
+            <p>Dealing with install inquiries and designing Solar Panel units for installation.</p>
+          </div>
+        </div>
+        <!-- Add more timeline items as needed -->
+      </div>
+    </section>
+    
+
     <!-- Portfolio Section -->
     <section id="portfolio" class="portfolio section">
 
       <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
         <h2>Portfolio</h2>
-        <p>These are my Projects that I have complete while on CarerSwitch course</p>
+        <p>These are my Projects that I have complete while on CarerSwitch course.</p>
       </div><!-- End Section Title -->
 
       <div class="container">
@@ -176,27 +241,39 @@
           <div class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
 
             <a href="/project1" target="_blank" class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app" style="text-decoration: none;">
-              <img src="project1img.PNG" class="img-fluid" alt="">
+              <img src="project1img.PNG" class="img-fluid projectimg" alt="">
               <div class="portfolio-info">
                   <h4>Gazetteer</h4>
                   <p>Application that displays information about selected countries on an interactive map</p>
+                  <div class="tech-stack">
+                    <i class="fab fa-html5" aria-hidden="true"></i>
+                    <i class="fab fa-css3-alt" aria-hidden="true"></i>
+                    <i class="fab fa-js-square" aria-hidden="true"></i>
+                    <i class="fab fa-php" aria-hidden="true"></i>
+                  </div>
               </div>
             </a><!-- End Portfolio Item -->
 
             <a href="/project2" class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app" style="text-decoration: none;" target="_blank">
-              <img src="project2img.PNG" class="img-fluid" alt="">
+              <img src="project2img.PNG" class="img-fluid projectimg" alt="">
               <div class="portfolio-info">
                   <h4>Company Directory</h4>
-                  <p>SQL database that allows CRUD operations</p>
+                  <p>Application which linked 3 differnet tables together, and allows CRUD operation on each one</p>
+                  <div class="tech-stack">
+                    <i class="fab fa-html5" aria-hidden="true"></i>
+                    <i class="fab fa-css3-alt" aria-hidden="true"></i>
+                    <i class="fab fa-js-square" aria-hidden="true"></i>
+                    <i class="fab fa-php" aria-hidden="true"></i>
+                    <i class="fas fa-database" aria-hidden="true"></i>
+                  </div>
               </div>
             </a><!-- End Portfolio Item -->
 
             <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-branding">
-              <img src="dermotfleming.jpg" class="img-fluid blur" alt="">
+              <img src="dermotfleming.jpg" class="img-fluid blur projectimg" alt="">
               <div class="portfolio-info">
                 <h4>Coming Soon</h4>
                 <p>Dermot Fleming Lighting</p>
-                <a href="dermotfleming.jpg" title="Dermot Fleming Lighting" data-gallery="Dermot Fleming Lighting" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
               </div>
             </div><!-- End Portfolio Item -->           
           </div><!-- End Portfolio Container -->
