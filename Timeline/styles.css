@@ -1,0 +1,252 @@
+/* === CSS Reset === */
+* {
+  padding: 0px;
+
+}
+
+/* Honizontial Timeline */
+.timeline-container {
+  display: flex;
+  height: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  background-color: #E8F4FF;
+}
+.timeline-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%; 
+  height: 100vh; 
+}
+.timeline-item-content{
+  position: relative;
+  padding-left: 320px;
+}
+.timeline-item-content h3 {
+  font-size: 33vh;
+  /* 128px */
+  color: #480124;
+  opacity: 25%;  
+  position: absolute;
+  bottom: -42%;
+  left: 0%;
+  transform: rotate(-7deg);
+}
+
+.content{
+  height: 100%;
+  width: auto;
+  position: relative;
+  display: flex;
+}
+.content-line {
+  width: 55%;
+  height: 8px;
+  display: block;
+  background: #95BFE5;
+  margin-bottom: 20px;
+}
+
+/* Hero Section */
+.collage {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+.title{
+  font-size: 8rem;
+  color: white;
+  text-shadow: 2px 2px 20px black;
+  margin: 0;
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 20;
+}
+.history{
+  top:38%
+}
+.collage-image{
+  position: absolute;
+  height: auto;
+  object-position: center;
+}
+.topleft{
+  width: 62%;
+  top: -24%;
+  left: 0%;
+}
+.topleftmid{
+  width: 18%;
+  top: 1%;
+  left: 38%;
+  z-index: 1;
+}
+.toprightmid{
+  width: 48%;
+  top: 0%;
+  right: 8%;
+}
+.topright{
+  width: 21%;
+  top: 7%;
+  right: 2%;
+  z-index: 1;
+}
+.bottomleft{
+  width: 38%;
+  bottom: -6%;
+  left: 0%;
+}
+.bottomleftmid {
+  width: 18%;
+  bottom: 3%;
+  left: 30%;
+  z-index: 2;
+}
+.bottomrightmid{
+  width: 30%;
+  bottom: -17%;
+  right: 24%;
+  z-index: 0;
+}
+.bottomright{
+  width: 29%;
+  bottom: 0%;
+  right: -3%;
+  z-index: 0;
+}
+
+/* Founding */
+h2 {
+  font-family: "Poppins", serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 5vh;
+  color: #480124;
+}
+p {
+  font-family: "Poppins", serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 2.1vh;
+  font-weight: 500;
+  color: #480124;
+}
+.text-content {
+  height: 100%;
+  width: 520px; 
+  position: relative;
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+.text-content p {
+  margin-bottom: 25px;
+  word-wrap: break-word; 
+  overflow-wrap: break-word;
+  white-space: normal; 
+  max-width: 100%; 
+  text-align: left;
+}
+.text-content h2{
+  position: absolute;
+  top: 20%;
+}
+.images{
+  position: relative;
+  margin-left: 65px;
+  width: 1000px;
+}
+.images img{
+  position: absolute;
+  height: auto;
+  object-position: center;
+}
+.front-image{
+  top: 8%;
+  right: 15%;
+  width: 52%;
+  z-index: 1;
+}
+.back-image{
+  height: 75%;
+  width: 50%;
+  left: 8%;
+  bottom: 8%;
+}
+/* Golden Era */
+.text-content h2.GE-title {
+  top: 11%;
+}
+.GE-front-image{
+  bottom: 11%;
+  left: 0%;
+  width: 54%;
+  z-index: 2;
+}
+.GE-back-image{
+  height: 75%;
+  width: 76%;
+  right: 10%;
+  top: 11%;
+  z-index: 1;
+}
+.timeline-item-content h3.GE-DOM {
+  font-size: 22vh;
+  opacity: 25%;
+  top: -29%;
+  left: 7%;
+  transform: rotate(0deg);
+}
+.GE-TLC{
+  padding-left: 150px;
+}
+
+/* TUm TIME */
+
+/* European Royalty */
+.timeline-item-content h3.ER-CHAMP {
+  font-size: 20vh;
+  opacity: 25%;
+  bottom: -22%;
+  left: 30%;
+  transform: rotate(0deg);
+}
+.ER-front-image {
+ width: 50%;
+ top: 12%;
+ left: 20%;
+ z-index: 3;
+}
+.ER-back-image{
+  width: 62%;
+  bottom:12%;
+  left:33%;
+  z-index: 2;
+}
+.text-content-ER p{
+  text-align: center;
+}
+.text-content H2.ER-title{
+  top:12%;
+  right:10%
+}
+.ER-content-line{
+  width: auto;
+}
+/* Modern Era */
+.ME-text-content{
+  margin-left: 200px;
+}
+.timeline-item-content h3.ME-DOM {
+  font-size: 22vh;
+  opacity: 25%;
+  top: -24%;
+  left: 34%;
+  transform: rotate(-15deg);
+}
